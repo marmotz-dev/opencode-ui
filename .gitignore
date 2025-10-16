@@ -1,0 +1,11 @@
+# compiled output
+main.js
+src/**/*.js
+*.js.map
+
+# dependencies
+node_modules
+
+# misc
+/.angular
+.env
