@@ -1,3 +1,16 @@
-<h1 class="text-xl text-emerald-400">
-  {{ 'PAGES.HOME.TITLE' | translate }}
-</h1>
+<div class="flex h-screen w-full bg-slate-200">
+  <div class="h-full w-52">
+    <app-session-list></app-session-list>
+  </div>
+
+  <div class="my-1 mr-1 flex flex-1 flex-col gap-y-1">
+    <div class="flex-1">
+      <app-chat-area
+        [messages]="messages()"
+        [selectedConversationId]="selectedConversationId()"
+      />
+    </div>
+
+    <app-message-input (sendMessage)="onSendMessage($event)" />
+  </div>
+</div>

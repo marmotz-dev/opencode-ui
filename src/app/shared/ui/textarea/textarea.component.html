@@ -1,0 +1,13 @@
+<textarea
+  #textarea
+  pTextarea
+  fluid="true"
+  [pClass]="['block', styleClass()]"
+  [placeholder]="placeholder() ?? ''"
+  (input)="valueChanged($event)"
+  [value]="value() ?? ''"
+  [autoResize]="autoResize()"
+  (onResize)="onResize()"
+  [style.min-height]="autoResizeMinHeight() ? autoResizeMinHeight() + 'px' : null"
+  [style.max-height]="autoResizeMaxHeight() ? autoResizeMaxHeight() + 'px' : null"
+></textarea>

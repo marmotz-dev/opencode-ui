@@ -1,0 +1,28 @@
+<div class="flex h-full flex-col rounded-2xl bg-white">
+  <div class="flex-1 overflow-y-auto p-4">
+    @if (selectedConversationId()) {
+      <div>
+        @for (message of messages(); track message) {
+          <div
+            class="mb-4"
+            [class.text-right]="message.sender === 'user'"
+          >
+            <div
+              class="inline-block max-w-xs rounded-lg p-3"
+              [class.bg-blue-500]="message.sender === 'user'"
+              [class.text-white]="message.sender === 'user'"
+              [class.bg-gray-200]="message.sender === 'ai'"
+            >
+              {{ message.text }}
+            </div>
+            <div class="mt-1 text-xs text-gray-500">
+              {{ message.timestamp | date: 'short' }}
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="mt-10 text-center text-gray-500">Sélectionnez une conversation pour commencer.</div>
+    }
+  </div>
+</div>

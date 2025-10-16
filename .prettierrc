@@ -15,7 +15,8 @@
     "prettier-plugin-tailwindcss"
   ],
   "tailwindAttributes": [
-    "styleClass"
+    "styleClass",
+    "pClass"
   ],
   "overrides": [
     {
