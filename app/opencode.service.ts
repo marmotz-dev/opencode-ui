@@ -24,4 +24,16 @@ export class OpencodeService {
       },
     })
   }
+
+  async deleteSession(sessionId: string) {
+    return (await this.getClient()).session.delete({
+      path: {
+        id: sessionId,
+      },
+    })
+  }
+
+  async createSession() {
+    return (await this.getClient()).session.create()
+  }
 }

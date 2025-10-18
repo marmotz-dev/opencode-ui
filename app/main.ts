@@ -69,8 +69,12 @@ try {
 
     // Set up IPC handlers for Opencode service
     const opencodeService = new OpencodeService()
-    ipcMain.handle('get-current-sessions', async () => opencodeService.getCurrentSessions())
-    ipcMain.handle('get-session-messages', async (_event, sessionId: string) =>
+    ipcMain.handle('opencode.session.create', async () => opencodeService.createSession())
+    ipcMain.handle('opencode.session.delete', async (_event, sessionId: string) =>
+      opencodeService.deleteSession(sessionId)
+    )
+    ipcMain.handle('opencode.session.get-all', async () => opencodeService.getCurrentSessions())
+    ipcMain.handle('opencode.session.messages.get-all', async (_event, sessionId: string) =>
       opencodeService.getSessionMessages(sessionId)
     )
   })

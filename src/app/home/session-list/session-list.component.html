@@ -21,9 +21,29 @@
           },
         ]"
         (click)="selectSession(session.id)"
+        (contextmenu)="openContextMenu($event, session.id)"
       >
         <div>{{ session.title }}</div>
       </div>
     }
   </div>
 </div>
+
+<p-contextmenu
+  #contextMenu
+  [model]="contextMenuItems"
+  (onHide)="hideContextMenu()"
+>
+  <ng-template
+    #item
+    let-item
+  >
+    <a class="p-contextmenu-item-link flex items-center">
+      <span class="flex-1">{{ item.label }}</span>
+      <app-ui-icon
+        [icon]="item.icon"
+        [class]="item.iconClass ?? 'text-slate-500'"
+      />
+    </a>
+  </ng-template>
+</p-contextmenu>

@@ -32,5 +32,19 @@ export class OpencodeService {
             });
         });
     }
+    deleteSession(sessionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getClient()).session.delete({
+                path: {
+                    id: sessionId,
+                },
+            });
+        });
+    }
+    createSession() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getClient()).session.create();
+        });
+    }
 }
 //# sourceMappingURL=opencode.service.js.map

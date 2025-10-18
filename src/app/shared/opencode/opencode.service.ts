@@ -1,14 +1,11 @@
 import { Injectable, inject, signal } from '@angular/core'
-import { BadRequestError, NotFoundError, Session } from '@opencode-ai/sdk/client'
 import { ElectronService } from '../../core/services'
-import { SessionMessage } from './opencode.types'
-
-type GetCurrentSessionsResponse =
-  | ({ data: Session[]; error: undefined } & { request: Request; response: Response })
-  | ({ data: undefined; error: unknown } & { request: Request; response: Response })
-type GetSessionMessagesResponse =
-  | ({ data: SessionMessage[]; error: undefined } & { request: Request; response: Response })
-  | ({ data: undefined; error: BadRequestError | NotFoundError } & { request: Request; response: Response })
+import {
+  CreateSessionResponse,
+  GetCurrentSessionsResponse,
+  GetSessionMessagesResponse,
+  SessionMessage,
+} from './opencode.types'
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +20,7 @@ export class OpencodeService {
   public sessionMessages = this._sessionMessages.asReadonly()
 
   async getCurrentSessions(): Promise<GetCurrentSessionsResponse> {
-    return this.electronService.ipcRenderer.invoke('get-current-sessions')
+    return this.electronService.ipcRenderer.invoke('opencode.session.get-all')
   }
 
   setCurrentSession(id: string) {
@@ -31,14 +28,20 @@ export class OpencodeService {
 
     if (id) {
       this.electronService.ipcRenderer
-        .invoke('get-session-messages', id)
+        .invoke('opencode.session.messages.get-all', id)
         .then((response: GetSessionMessagesResponse) => {
           console.log(response)
 
           this._sessionMessages.set(response.data ?? [])
         })
-    } else {
-      return null
     }
+  }
+
+  deleteSession(id: string): Promise<void> {
+    return this.electronService.ipcRenderer.invoke('opencode.session.delete', id)
+  }
+
+  async createSession(): Promise<CreateSessionResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.session.create')
   }
 }
