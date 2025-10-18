@@ -1,5 +1,5 @@
-import { Component, input } from '@angular/core';
-import { FaIconComponent, IconDefinition } from '@fortawesome/angular-fontawesome';
+import { Component, input } from '@angular/core'
+import { FaIconComponent, IconDefinition } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-ui-icon',
@@ -7,5 +7,5 @@ import { FaIconComponent, IconDefinition } from '@fortawesome/angular-fontawesom
   template: `<fa-icon [icon]="icon()" />`,
 })
 export class IconUi {
-  readonly icon = input.required<IconDefinition>();
+  readonly icon = input.required<IconDefinition>()
 }

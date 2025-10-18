@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core'
+import { inject, Injectable, signal } from '@angular/core'
 import { ElectronService } from '../../core/services'
 import {
   CreateSessionResponse,
@@ -19,8 +19,20 @@ export class OpencodeService {
   private _sessionMessages = signal<SessionMessage[] | null>(null)
   public sessionMessages = this._sessionMessages.asReadonly()
 
+  async createSession(): Promise<CreateSessionResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.session.create')
+  }
+
+  deleteSession(id: string): Promise<void> {
+    return this.electronService.ipcRenderer.invoke('opencode.session.delete', id)
+  }
+
   async getCurrentSessions(): Promise<GetCurrentSessionsResponse> {
     return this.electronService.ipcRenderer.invoke('opencode.session.get-all')
+  }
+
+  onEvent(callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+    this.electronService.ipcRenderer.on('opencode.event', callback)
   }
 
   setCurrentSession(id: string) {
@@ -35,13 +47,5 @@ export class OpencodeService {
           this._sessionMessages.set(response.data ?? [])
         })
     }
-  }
-
-  deleteSession(id: string): Promise<void> {
-    return this.electronService.ipcRenderer.invoke('opencode.session.delete', id)
-  }
-
-  async createSession(): Promise<CreateSessionResponse> {
-    return this.electronService.ipcRenderer.invoke('opencode.session.create')
   }
 }

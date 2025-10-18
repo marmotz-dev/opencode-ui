@@ -1,9 +1,9 @@
 <div class="flex h-full flex-col p-2">
   <p-button
-    label="New session"
-    class="mb-2"
-    styleClass="w-full"
     (onClick)="createNewSession()"
+    class="mb-2"
+    label="New session"
+    styleClass="w-full"
   >
     <ng-template #icon>
       <app-ui-icon [icon]="faPlusCircle" />
@@ -13,6 +13,8 @@
   <div class="flex-1 overflow-y-auto">
     @for (session of sessions(); track session) {
       <div
+        (click)="selectSession(session.id)"
+        (contextmenu)="openContextMenu($event, session.id)"
         [pClass]="[
           'mb-1 cursor-pointer rounded border-r-4 p-2',
           {
@@ -20,8 +22,6 @@
             'border-slate-400/25 bg-slate-300/25 hover:bg-slate-400/25': currentSessionId() !== session.id,
           },
         ]"
-        (click)="selectSession(session.id)"
-        (contextmenu)="openContextMenu($event, session.id)"
       >
         <div>{{ session.title }}</div>
       </div>
@@ -31,8 +31,8 @@
 
 <p-contextmenu
   #contextMenu
-  [model]="contextMenuItems"
   (onHide)="hideContextMenu()"
+  [model]="contextMenuItems"
 >
   <ng-template
     #item
@@ -41,8 +41,8 @@
     <a class="p-contextmenu-item-link flex items-center">
       <span class="flex-1">{{ item.label }}</span>
       <app-ui-icon
-        [icon]="item.icon"
         [class]="item.iconClass ?? 'text-slate-500'"
+        [icon]="item.icon"
       />
     </a>
   </ng-template>

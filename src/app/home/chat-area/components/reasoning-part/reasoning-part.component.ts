@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, input } from '@angular/core'
 import { Message, ReasoningPart } from '@opencode-ai/sdk/client'
 import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
@@ -7,7 +6,7 @@ import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 
 @Component({
   selector: 'app-reasoning-part',
-  imports: [CommonModule, PartTimeDurationPipe, RelativeTimePipe, MarkdownUi],
+  imports: [PartTimeDurationPipe, RelativeTimePipe, MarkdownUi],
   templateUrl: './reasoning-part.component.html',
 })
 export class ReasoningPartComponent {

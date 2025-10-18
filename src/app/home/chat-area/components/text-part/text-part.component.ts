@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { Component, input } from '@angular/core'
 import { Message, TextPart } from '@opencode-ai/sdk/client'
 import { MarkdownComponent } from 'ngx-markdown'
@@ -7,7 +6,7 @@ import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 
 @Component({
   selector: 'app-text-part',
-  imports: [CommonModule, ClassNames, MarkdownComponent, RelativeTimePipe],
+  imports: [ClassNames, MarkdownComponent, RelativeTimePipe],
   templateUrl: './text-part.component.html',
 })
 export class TextPartComponent {

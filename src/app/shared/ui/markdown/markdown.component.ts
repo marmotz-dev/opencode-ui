@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common'
 import { Component, input } from '@angular/core'
 import { MarkdownComponent } from 'ngx-markdown'
 
 @Component({
   selector: 'app-ui-markdown',
   standalone: true,
-  imports: [CommonModule, MarkdownComponent],
+  imports: [MarkdownComponent],
   template: `
     <markdown
       [data]="data()"

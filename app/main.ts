@@ -64,17 +64,15 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => {
+  app.on('ready', async () => {
     setTimeout(createWindow, 400)
 
     // Set up IPC handlers for Opencode service
-    const opencodeService = new OpencodeService()
-    ipcMain.handle('opencode.session.create', async () => opencodeService.createSession())
-    ipcMain.handle('opencode.session.delete', async (_event, sessionId: string) =>
-      opencodeService.deleteSession(sessionId)
-    )
-    ipcMain.handle('opencode.session.get-all', async () => opencodeService.getCurrentSessions())
-    ipcMain.handle('opencode.session.messages.get-all', async (_event, sessionId: string) =>
+    const opencodeService = await OpencodeService.init()
+    ipcMain.handle('opencode.session.create', () => opencodeService.createSession())
+    ipcMain.handle('opencode.session.delete', (_event, sessionId: string) => opencodeService.deleteSession(sessionId))
+    ipcMain.handle('opencode.session.get-all', () => opencodeService.getCurrentSessions())
+    ipcMain.handle('opencode.session.messages.get-all', (_event, sessionId: string) =>
       opencodeService.getSessionMessages(sessionId)
     )
   })

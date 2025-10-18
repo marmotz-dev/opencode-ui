@@ -4,9 +4,9 @@
   line-height: 0;
 }
 
-::ng-deep li, ::ng-deep p {
+::ng-deep li,
+::ng-deep p {
   line-height: 1.85;
-  text-align: justify;
 }
 
 ::ng-deep h1 {

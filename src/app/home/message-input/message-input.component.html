@@ -1,20 +1,20 @@
 <div class="flex items-end gap-x-2">
   <app-ui-textarea
-    [(value)]="message"
     (keydown.control.enter)="onSend()"
-    placeholder="Write your question"
-    [autoResizeMinHeight]="50"
+    [(value)]="message"
     [autoResizeMaxHeight]="200"
+    [autoResizeMinHeight]="50"
     autoResize="true"
     class="w-full"
+    placeholder="Write your question"
   />
 
   <p-button
-    label="Send"
-    icon="pi pi-send"
-    class="rounded-l-none"
-    styleClass="h-16 rounded-l-none"
     (onClick)="onSend()"
+    class="rounded-l-none"
+    icon="pi pi-send"
+    label="Send"
+    styleClass="h-16 rounded-l-none"
   >
     <ng-template #icon>
       <app-ui-icon

@@ -13,17 +13,9 @@ import { IconUi } from '../../shared/ui/icon/icon.ui'
   templateUrl: './session-list.component.html',
 })
 export class SessionListComponent {
-  protected readonly faPlusCircle = faPlusCircle
-
   sessions = signal<Session[]>([])
-
-  private readonly opencodeService = inject(OpencodeService)
-
-  currentSessionId = this.opencodeService.currentSessionId
-
   readonly contextMenu = viewChild<ContextMenu>('contextMenu')
   readonly commandSessionId = signal<string | null>(null)
-
   contextMenuItems = [
     // { label: 'Rename', icon: faPencil },
     {
@@ -33,9 +25,32 @@ export class SessionListComponent {
       command: () => this.deleteSession(),
     },
   ]
+  protected readonly faPlusCircle = faPlusCircle
+  private readonly opencodeService = inject(OpencodeService)
+  currentSessionId = this.opencodeService.currentSessionId
 
   constructor() {
     this.loadSessions()
+  }
+
+  async createNewSession() {
+    const newSession = await this.opencodeService.createSession()
+    if (newSession.data?.id) {
+      await this.loadSessions()
+      this.opencodeService.setCurrentSession(newSession.data.id)
+    }
+  }
+
+  async deleteSession() {
+    const sessionId = this.commandSessionId()
+    if (sessionId) {
+      await this.opencodeService.deleteSession(sessionId)
+      await this.loadSessions()
+    }
+  }
+
+  hideContextMenu() {
+    this.commandSessionId.set(null)
   }
 
   async loadSessions() {
@@ -52,26 +67,6 @@ export class SessionListComponent {
     }
   }
 
-  async deleteSession() {
-    const sessionId = this.commandSessionId()
-    if (sessionId) {
-      await this.opencodeService.deleteSession(sessionId)
-      await this.loadSessions()
-    }
-  }
-
-  selectSession(id: string) {
-    this.opencodeService.setCurrentSession(id)
-  }
-
-  async createNewSession() {
-    const newSession = await this.opencodeService.createSession()
-    if (newSession.data?.id) {
-      await this.loadSessions()
-      this.opencodeService.setCurrentSession(newSession.data.id)
-    }
-  }
-
   openContextMenu(event: PointerEvent, sessionId: string) {
     const contextMenu = this.contextMenu()
 
@@ -85,7 +80,7 @@ export class SessionListComponent {
     }
   }
 
-  hideContextMenu() {
-    this.commandSessionId.set(null)
+  selectSession(id: string) {
+    this.opencodeService.setCurrentSession(id)
   }
 }

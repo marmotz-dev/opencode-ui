@@ -39,12 +39,6 @@ export class TextareaUi {
     })
   }
 
-  valueChanged(event: Event): void {
-    const value = (event.target as HTMLInputElement).value
-
-    this.value.set(value)
-  }
-
   onResize(): void {
     const textarea = this.textarea()
 
@@ -66,5 +60,11 @@ export class TextareaUi {
     if (textarea && this.autoResize()) {
       textarea.nativeElement.dispatchEvent(new Event('input'))
     }
+  }
+
+  valueChanged(event: Event): void {
+    const value = (event.target as HTMLInputElement).value
+
+    this.value.set(value)
   }
 }

@@ -1,39 +1,47 @@
 import { createOpencode, OpencodeClient } from '@opencode-ai/sdk'
+import { ipcMain } from 'electron'
 
 export class OpencodeService {
-  private client?: OpencodeClient
+  private constructor(private readonly client: OpencodeClient) {
+    this.listenEvents()
+  }
 
-  private async getClient() {
-    if (!this.client) {
-      const { client } = await createOpencode()
+  static async init() {
+    const { client } = await createOpencode()
 
-      this.client = client
+    return new OpencodeService(client)
+  }
+
+  createSession() {
+    return this.client.session.create()
+  }
+
+  deleteSession(sessionId: string) {
+    return this.client.session.delete({
+      path: {
+        id: sessionId,
+      },
+    })
+  }
+
+  getCurrentSessions() {
+    return this.client.session.list()
+  }
+
+  getSessionMessages(sessionId: string) {
+    return this.client.session.messages({
+      path: {
+        id: sessionId,
+      },
+    })
+  }
+
+  async listenEvents() {
+    const events = await this.client.event.subscribe({})
+
+    for await (const event of events.stream) {
+      ipcMain.emit('opencode.event', event)
+      console.log(`Opencode event:`, event)
     }
-
-    return this.client
-  }
-
-  async getCurrentSessions() {
-    return (await this.getClient()).session.list()
-  }
-
-  async getSessionMessages(sessionId: string) {
-    return (await this.getClient()).session.messages({
-      path: {
-        id: sessionId,
-      },
-    })
-  }
-
-  async deleteSession(sessionId: string) {
-    return (await this.getClient()).session.delete({
-      path: {
-        id: sessionId,
-      },
-    })
-  }
-
-  async createSession() {
-    return (await this.getClient()).session.create()
   }
 }
