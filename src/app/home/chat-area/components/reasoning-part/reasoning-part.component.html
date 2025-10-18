@@ -1,0 +1,18 @@
+<div class="flex w-full flex-col items-start gap-y-1.5 pr-50 text-sm">
+  <div
+    class="space-y-5 rounded-lg border border-slate-100 bg-linear-to-b from-slate-50 to-slate-100 p-4 text-slate-700 shadow-lg"
+  >
+    @let time = part().time;
+    <div>
+      @if (!time.end) {
+        Thinking...
+      } @else {
+        Thought during {{ time | partTimeDuration }} seconds :
+      }
+    </div>
+
+    <app-ui-markdown [data]="part().text" />
+  </div>
+
+  <p class="text-sm">{{ info().time.created | relativeTime }}</p>
+</div>

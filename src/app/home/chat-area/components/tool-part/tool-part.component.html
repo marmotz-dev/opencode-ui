@@ -1,0 +1,9 @@
+<div class="flex w-full flex-col items-start gap-y-1.5 pr-50 text-sm">
+  <div
+    class="space-y-5 rounded-lg border border-slate-100 bg-linear-to-b from-slate-50 to-slate-100 p-4 whitespace-pre-wrap text-slate-700 shadow-lg"
+  >
+    {{ part() | json }}
+  </div>
+
+  <p class="text-sm">{{ info().time.created | relativeTime }}</p>
+</div>

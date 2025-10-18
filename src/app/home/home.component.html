@@ -1,16 +1,15 @@
 <div class="flex h-screen w-full bg-slate-200">
-  <div class="h-full w-52">
-    <app-session-list></app-session-list>
+  <div class="h-full w-80">
+    <app-session-list />
   </div>
 
-  <div class="my-1 mr-1 flex flex-1 flex-col gap-y-1">
-    <div class="flex-1">
-      <app-chat-area
-        [messages]="messages()"
-        [selectedConversationId]="selectedConversationId()"
-      />
+  <div class="my-1 mr-1 flex max-h-full flex-1 flex-col gap-y-1">
+    <div class="flex h-full flex-1 flex-col overflow-y-auto rounded-2xl bg-white">
+      <app-chat-area />
     </div>
 
-    <app-message-input (sendMessage)="onSendMessage($event)" />
+    <div class="rounded-2xl bg-slate-100 p-4">
+      <app-message-input (sendMessage)="onSendMessage($event)" />
+    </div>
   </div>
 </div>

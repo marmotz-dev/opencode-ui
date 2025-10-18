@@ -1,0 +1,14 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "opencodesk-electron",
+      "dependencies": {
+        "@opencode-ai/sdk": "^0.15.5",
+      },
+    },
+  },
+  "packages": {
+    "@opencode-ai/sdk": ["@opencode-ai/sdk@0.15.5", "", {}, "sha512-V29hOqlUT0yuCA2dIkU1Sub9RjceaJug0UowEpIJKCU4kdFxHyl4HGGCdWA8UOPUMIQ+HHNoYhnMSdTlN/kLgg=="],
+  }
+}

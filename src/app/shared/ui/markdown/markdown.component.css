@@ -1,0 +1,45 @@
+::ng-deep ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  line-height: 0;
+}
+
+::ng-deep li, ::ng-deep p {
+  line-height: 1.85;
+  text-align: justify;
+}
+
+::ng-deep h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+::ng-deep h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+::ng-deep h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+::ng-deep h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+::ng-deep code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.5rem;
+  font-family: 'Source Code Pro', monospace;
+}

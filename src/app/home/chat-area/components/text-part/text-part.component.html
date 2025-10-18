@@ -1,0 +1,27 @@
+@let role = info().role;
+<div
+  [pClass]="[
+    'flex w-full flex-col items-end gap-y-1.5',
+    {
+      'pl-50': role === 'user',
+      'pr-50': role !== 'user',
+    },
+  ]"
+>
+  <div
+    [pClass]="[
+      'rounded-lg border p-4 text-slate-700 shadow-lg',
+      {
+        'border-sky-100 bg-linear-to-b from-sky-50 to-sky-100': role === 'user',
+        'border-amber-100 bg-linear-to-b from-amber-50 to-amber-100': role !== 'user',
+      },
+    ]"
+  >
+    <markdown
+      [data]="part().text"
+      class="whitespace-break-spaces"
+    />
+  </div>
+
+  <p class="text-sm">{{ info().time.created | relativeTime }} · {{ username() }}</p>
+</div>

@@ -1,28 +1,26 @@
-<div class="rounded-2xl bg-slate-100 p-4">
-  <div class="flex items-end gap-x-2">
-    <app-ui-textarea
-      [(value)]="message"
-      (keydown.control.enter)="onSend()"
-      placeholder="Write your question"
-      [autoResizeMinHeight]="50"
-      [autoResizeMaxHeight]="200"
-      autoResize="true"
-      class="w-full"
-    />
+<div class="flex items-end gap-x-2">
+  <app-ui-textarea
+    [(value)]="message"
+    (keydown.control.enter)="onSend()"
+    placeholder="Write your question"
+    [autoResizeMinHeight]="50"
+    [autoResizeMaxHeight]="200"
+    autoResize="true"
+    class="w-full"
+  />
 
-    <p-button
-      label="Send"
-      icon="pi pi-send"
-      class="rounded-l-none"
-      styleClass="h-16 rounded-l-none"
-      (onClick)="onSend()"
-    >
-      <ng-template #icon>
-        <app-ui-icon
-          [icon]="faPaperPlane"
-          class="text-xl"
-        />
-      </ng-template>
-    </p-button>
-  </div>
+  <p-button
+    label="Send"
+    icon="pi pi-send"
+    class="rounded-l-none"
+    styleClass="h-16 rounded-l-none"
+    (onClick)="onSend()"
+  >
+    <ng-template #icon>
+      <app-ui-icon
+        [icon]="faPaperPlane"
+        class="text-xl"
+      />
+    </ng-template>
+  </p-button>
 </div>

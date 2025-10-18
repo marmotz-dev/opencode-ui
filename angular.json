@@ -1,9 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ]
+    "schematicCollections": ["@angular-eslint/schematics"]
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -31,14 +29,47 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "inlineStyleLanguage": "css",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["node_modules/prismjs/themes/prism-okaidia.css", "src/styles.css"],
+            "scripts": [
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-apacheconf.min.js",
+              "node_modules/prismjs/components/prism-aspnet.min.js",
+              "node_modules/prismjs/components/prism-bash.min.js",
+              "node_modules/prismjs/components/prism-c.min.js",
+              "node_modules/prismjs/components/prism-cpp.min.js",
+              "node_modules/prismjs/components/prism-csharp.min.js",
+              "node_modules/prismjs/components/prism-css.min.js",
+              "node_modules/prismjs/components/prism-csv.min.js",
+              "node_modules/prismjs/components/prism-dart.min.js",
+              "node_modules/prismjs/components/prism-django.min.js",
+              "node_modules/prismjs/components/prism-dns-zone-file.min.js",
+              "node_modules/prismjs/components/prism-docker.min.js",
+              "node_modules/prismjs/components/prism-editorconfig.min.js",
+              "node_modules/prismjs/components/prism-gettext.min.js",
+              "node_modules/prismjs/components/prism-git.min.js",
+              "node_modules/prismjs/components/prism-go.min.js",
+              "node_modules/prismjs/components/prism-java.min.js",
+              "node_modules/prismjs/components/prism-javascript.min.js",
+              "node_modules/prismjs/components/prism-json.min.js",
+              "node_modules/prismjs/components/prism-jsx.min.js",
+              "node_modules/prismjs/components/prism-kotlin.min.js",
+              "node_modules/prismjs/components/prism-less.min.js",
+              "node_modules/prismjs/components/prism-makefile.min.js",
+              "node_modules/prismjs/components/prism-markdown.min.js",
+              "node_modules/prismjs/components/prism-mongodb.min.js",
+              "node_modules/prismjs/components/prism-nginx.min.js",
+              "node_modules/prismjs/components/prism-php.min.js",
+              "node_modules/prismjs/components/prism-python.min.js",
+              "node_modules/prismjs/components/prism-rust.min.js",
+              "node_modules/prismjs/components/prism-sass.min.js",
+              "node_modules/prismjs/components/prism-scss.min.js",
+              "node_modules/prismjs/components/prism-sql.min.js",
+              "node_modules/prismjs/components/prism-toml.min.js",
+              "node_modules/prismjs/components/prism-typescript.min.js",
+              "node_modules/prismjs/components/prism-yaml.min.js",
+              "node_modules/prismjs/components/prism-zig.min.js"
             ],
-            "styles": [
-              "src/styles.css"
-            ],
-            "scripts": [],
             "customWebpackConfig": {
               "path": "./angular.webpack.js",
               "replaceDuplicatePlugins": true
@@ -53,7 +84,7 @@
               "aot": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": false
             },
             "production": {
               "optimization": true,
@@ -142,10 +173,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -157,9 +185,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "e2e/**/*.ts"
-            ]
+            "lintFilePatterns": ["e2e/**/*.ts"]
           }
         }
       }

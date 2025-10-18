@@ -11,19 +11,18 @@
   </p-button>
 
   <div class="flex-1 overflow-y-auto">
-    @for (conv of sessions(); track conv) {
+    @for (session of sessions(); track session) {
       <div
         [pClass]="[
           'mb-1 cursor-pointer rounded border-r-4 p-2',
           {
-            'border-emerald-400/25 bg-emerald-300/25 hover:bg-emerald-400/25': selectedSessionId() === conv.id,
-            'border-slate-400/25 bg-slate-300/25 hover:bg-slate-400/25': selectedSessionId() !== conv.id,
+            'border-emerald-400/25 bg-emerald-300/25 hover:bg-emerald-400/25': currentSessionId() === session.id,
+            'border-slate-400/25 bg-slate-300/25 hover:bg-slate-400/25': currentSessionId() !== session.id,
           },
         ]"
-        (click)="selectSession(conv.id)"
+        (click)="selectSession(session.id)"
       >
-        <div class="font-semibold">{{ conv.title }}</div>
-        <div class="text-sm text-gray-600">{{ conv.lastMessage }}</div>
+        <div>{{ session.title }}</div>
       </div>
     }
   </div>
