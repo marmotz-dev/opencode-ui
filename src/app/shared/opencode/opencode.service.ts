@@ -1,4 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core'
+import { Event } from '@opencode-ai/sdk/client'
 import { ElectronService } from '../../core/services'
 import {
   CreateSessionResponse,
@@ -19,6 +20,12 @@ export class OpencodeService {
   private _sessionMessages = signal<SessionMessage[] | null>(null)
   public sessionMessages = this._sessionMessages.asReadonly()
 
+  private debounceMessageLoad?: ReturnType<typeof setTimeout>
+
+  constructor() {
+    this.listenEvents()
+  }
+
   async createSession(): Promise<CreateSessionResponse> {
     return this.electronService.ipcRenderer.invoke('opencode.session.create')
   }
@@ -31,21 +38,44 @@ export class OpencodeService {
     return this.electronService.ipcRenderer.invoke('opencode.session.get-all')
   }
 
-  onEvent(callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
-    this.electronService.ipcRenderer.on('opencode.event', callback)
+  listenEvents() {
+    this.electronService.ipcRenderer.on('opencode.event', (_e, event: Event) => {
+      console.log('New opencode event', event)
+
+      if (event.type.endsWith('.updated')) {
+        if (this.debounceMessageLoad) {
+          clearTimeout(this.debounceMessageLoad)
+        }
+
+        this.debounceMessageLoad = setTimeout(() => {
+          this.getSessionMessages()
+        }, 100)
+      }
+    })
+  }
+
+  async prompt(message: string) {
+    const currentSessionId = this.currentSessionId()
+    if (currentSessionId) {
+      await this.electronService.ipcRenderer.invoke('opencode.session.prompt', currentSessionId, message)
+    }
   }
 
   setCurrentSession(id: string) {
     this._currentSessionId.set(id)
 
     if (id) {
-      this.electronService.ipcRenderer
-        .invoke('opencode.session.messages.get-all', id)
-        .then((response: GetSessionMessagesResponse) => {
-          console.log(response)
-
-          this._sessionMessages.set(response.data ?? [])
-        })
+      this.getSessionMessages()
     }
+  }
+
+  getSessionMessages() {
+    this.electronService.ipcRenderer
+      .invoke('opencode.session.messages.get-all', this._currentSessionId())
+      .then((response: GetSessionMessagesResponse) => {
+        console.log(response)
+
+        this._sessionMessages.set(response.data ?? [])
+      })
   }
 }

@@ -1,12 +1,24 @@
-::ng-deep ul {
-  list-style-type: disc;
+::ng-deep ul, ::ng-deep ol {
   padding-left: 1.5rem;
   line-height: 0;
 }
 
-::ng-deep li,
+::ng-deep ul {
+  list-style-type: disc;
+}
+
+::ng-deep ol {
+  list-style-type: decimal;
+}
+
+::ng-deep ul li,
+::ng-deep ol ul li,
 ::ng-deep p {
   line-height: 1.85;
+}
+
+::ng-deep ol li {
+  line-height: 0;
 }
 
 ::ng-deep h1 {
@@ -37,9 +49,9 @@
   margin-bottom: 0.25rem;
 }
 
-::ng-deep code {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 0.2rem 0.4rem;
+::ng-deep code[class*="language-"],
+::ng-deep pre[class*="language-"] {
   border-radius: 0.5rem;
   font-family: 'Source Code Pro', monospace;
+  white-space: pre-wrap;
 }

@@ -1,9 +1,13 @@
 <div class="flex w-full flex-col items-start gap-y-1.5 pr-50 text-sm">
-  <div
+  <app-ui-collapsible
+    [header]="header()"
     class="space-y-5 rounded-lg border border-slate-100 bg-linear-to-b from-slate-50 to-slate-100 p-4 whitespace-pre-wrap text-slate-700 shadow-lg"
   >
-    {{ part() | json }}
-  </div>
+    <app-ui-markdown
+      [data]="output()"
+      class="inline-flex"
+    />
+  </app-ui-collapsible>
 
-  <p class="text-sm">{{ info().time.created | relativeTime }}</p>
+  <p class="text-xs">{{ info().time.created | relativeTime }}</p>
 </div>

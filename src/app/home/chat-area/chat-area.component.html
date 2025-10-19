@@ -17,12 +17,12 @@
           />
         }
 
-        <!--        @if (part.type === 'tool') {-->
-        <!--          <app-tool-part-->
-        <!--            [info]="message.info"-->
-        <!--            [part]="part"-->
-        <!--          />-->
-        <!--        }-->
+        @if (part.type === 'tool') {
+          <app-tool-part
+            [info]="message.info"
+            [part]="part"
+          />
+        }
       }
     }
   } @else {

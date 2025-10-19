@@ -1,8 +1,9 @@
-import { Component, output } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 import { Button } from 'primeng/button'
+import { OpencodeService } from '../../shared/opencode'
 
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
@@ -13,13 +14,15 @@ import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
   templateUrl: './message-input.component.html',
 })
 export class MessageInputComponent {
-  message = ''
-  sendMessage = output<string>()
   protected readonly faPaperPlane = faPaperPlane
+  protected message = ''
+  private readonly opencodeService = inject(OpencodeService)
 
   onSend() {
-    if (this.message.trim()) {
-      this.sendMessage.emit(this.message)
+    const message = this.message.trim()
+
+    if (message.length > 0) {
+      this.opencodeService.prompt(message)
       this.message = ''
     }
   }

@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '../environments/environment'
 import { ElectronService } from './core/services'
-import { OpencodeService } from './shared/opencode'
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,6 @@ import { OpencodeService } from './shared/opencode'
 export class AppComponent {
   private electronService = inject(ElectronService)
   private translate = inject(TranslateService)
-  private opencodeService = inject(OpencodeService)
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[])
@@ -35,10 +33,5 @@ export class AppComponent {
         console.log('Run in browser')
       }
     }
-
-    // Set up event listener early to catch events from main
-    this.opencodeService.onEvent((event: Electron.IpcRendererEvent, ...args: any[]) => {
-      console.log('Opencode event received in app.component:', event, args)
-    })
   }
 }

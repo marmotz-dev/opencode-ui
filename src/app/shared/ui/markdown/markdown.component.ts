@@ -3,7 +3,6 @@ import { MarkdownComponent } from 'ngx-markdown'
 
 @Component({
   selector: 'app-ui-markdown',
-  standalone: true,
   imports: [MarkdownComponent],
   template: `
     <markdown
@@ -12,7 +11,6 @@ import { MarkdownComponent } from 'ngx-markdown'
     />
   `,
   styleUrls: ['./markdown.component.css'],
-  changeDetection: 0, // OnPush
 })
 export class MarkdownUi {
   data = input.required<string>()

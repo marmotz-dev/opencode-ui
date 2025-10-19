@@ -4,12 +4,15 @@
   </div>
 
   <div class="my-1 mr-1 flex max-h-full flex-1 flex-col gap-y-1">
-    <div class="flex h-full flex-1 flex-col overflow-y-auto rounded-2xl bg-white">
+    <div
+      #scrollContainer
+      class="flex h-full flex-1 flex-col overflow-y-auto rounded-2xl bg-white"
+    >
       <app-chat-area />
     </div>
 
     <div class="rounded-2xl bg-slate-100 p-4">
-      <app-message-input (sendMessage)="onSendMessage($event)" />
+      <app-message-input />
     </div>
   </div>
 </div>

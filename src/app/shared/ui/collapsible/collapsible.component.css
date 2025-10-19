@@ -1,0 +1,20 @@
+::ng-deep fa-icon {
+  transition: all 300ms ease-out;
+}
+
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease-out, opacity 300ms ease-out, margin-top 300ms ease-out, opacity 300ms ease-out;
+  overflow: hidden;
+}
+
+.collapsible.open {
+  grid-template-rows: 1fr;
+  margin-top: 20px;
+}
+
+.collapsible-content {
+  min-height: 0;
+  margin-top: 0;
+}

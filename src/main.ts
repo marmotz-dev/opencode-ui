@@ -12,6 +12,7 @@ import { providePrimeNG } from 'primeng/config'
 import { AppComponent } from './app/app.component'
 import { environment } from './environments/environment'
 import { mainRoutes } from './main.routes'
+import './prism'
 
 if (environment.env === 'production') {
   enableProdMode()

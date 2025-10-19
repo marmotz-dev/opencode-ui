@@ -7,13 +7,31 @@ let win: BrowserWindow | null = null
 const args = process.argv.slice(1)
 const serve = args.some((val) => val === '--serve')
 
+const configPath = path.join(app.getPath('userData'), 'config.json')
+let config: Record<string, any> = {}
+if (fs.existsSync(configPath)) {
+  const configRawContent = fs.readFileSync(configPath)
+  config = JSON.parse(configRawContent.toString() ?? '{}')
+}
+
+let saveTimer: ReturnType<typeof setTimeout> | null = null
+function saveConfig() {
+  if (saveTimer) {
+    clearTimeout(saveTimer)
+  }
+
+  saveTimer = setTimeout(() => {
+    fs.writeFileSync(configPath, JSON.stringify(config))
+  }, 1000)
+}
+
 function createWindow(): BrowserWindow {
   const size = screen.getPrimaryDisplay().workAreaSize
 
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
+    x: config.position?.[0] ?? 0,
+    y: config.position?.[1] ?? 0,
     width: size.width,
     height: size.height,
     webPreferences: {
@@ -23,6 +41,8 @@ function createWindow(): BrowserWindow {
       webSecurity: !serve,
     },
   })
+
+  win.webContents.openDevTools()
 
   if (serve) {
     import('electron-debug').then((debug) => {
@@ -56,6 +76,11 @@ function createWindow(): BrowserWindow {
     win = null
   })
 
+  win.on('move', async () => {
+    config.position = win!.getPosition()
+    saveConfig()
+  })
+
   return win
 }
 
@@ -65,16 +90,21 @@ try {
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
   app.on('ready', async () => {
-    setTimeout(createWindow, 400)
+    setTimeout(async () => {
+      const window = createWindow()
 
-    // Set up IPC handlers for Opencode service
-    const opencodeService = await OpencodeService.init()
-    ipcMain.handle('opencode.session.create', () => opencodeService.createSession())
-    ipcMain.handle('opencode.session.delete', (_event, sessionId: string) => opencodeService.deleteSession(sessionId))
-    ipcMain.handle('opencode.session.get-all', () => opencodeService.getCurrentSessions())
-    ipcMain.handle('opencode.session.messages.get-all', (_event, sessionId: string) =>
-      opencodeService.getSessionMessages(sessionId)
-    )
+      // Set up IPC handlers for Opencode service
+      const opencodeService = await OpencodeService.init(window)
+      ipcMain.handle('opencode.session.create', () => opencodeService.createSession())
+      ipcMain.handle('opencode.session.delete', (_event, sessionId: string) => opencodeService.deleteSession(sessionId))
+      ipcMain.handle('opencode.session.get-all', () => opencodeService.getCurrentSessions())
+      ipcMain.handle('opencode.session.messages.get-all', (_event, sessionId: string) =>
+        opencodeService.getSessionMessages(sessionId)
+      )
+      ipcMain.handle('opencode.session.prompt', (_event, sessionId: string, message: string) =>
+        opencodeService.prompt(sessionId, message)
+      )
+    }, 400)
   })
 
   // Quit when all windows are closed.

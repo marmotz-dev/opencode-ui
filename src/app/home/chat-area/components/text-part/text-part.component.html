@@ -1,10 +1,10 @@
 @let role = info().role;
 <div
   [pClass]="[
-    'flex w-full flex-col items-end gap-y-1.5',
+    'flex w-full flex-col gap-y-1.5',
     {
-      'pl-50': role === 'user',
-      'pr-50': role !== 'user',
+      'items-end pl-50': role === 'user',
+      'items-start pr-50': role !== 'user',
     },
   ]"
 >
@@ -17,11 +17,8 @@
       },
     ]"
   >
-    <markdown
-      [data]="part().text"
-      class="whitespace-break-spaces"
-    />
+    <app-ui-markdown [data]="part().text" />
   </div>
 
-  <p class="text-sm">{{ info().time.created | relativeTime }} · {{ username() }}</p>
+  <p class="text-xs">{{ info().time.created | relativeTime }}</p>
 </div>

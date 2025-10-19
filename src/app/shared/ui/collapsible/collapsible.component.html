@@ -1,0 +1,29 @@
+@let isOpen = opened();
+
+<div [pClass]="styleClass()">
+  <div
+    class="touch-hitbox flex w-full cursor-pointer flex-row"
+    (click)="toggle()"
+  >
+    <div class="flex-1">
+      {{ header() }}
+    </div>
+    <div>
+      <app-ui-icon
+        [icon]="faChevronUp"
+        [styleClass]="{
+          '-rotate-180': isOpen,
+        }"
+      />
+    </div>
+  </div>
+
+  <div
+    [class.open]="isOpen"
+    class="collapsible"
+  >
+    <div class="collapsible-content">
+      <ng-content />
+    </div>
+  </div>
+</div>

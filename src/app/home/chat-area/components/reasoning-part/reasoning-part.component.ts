@@ -1,12 +1,13 @@
 import { Component, input } from '@angular/core'
 import { Message, ReasoningPart } from '@opencode-ai/sdk/client'
+import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.component'
 import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
 import { PartTimeDurationPipe } from '../../pipes/part-time-duration.pipe'
 import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 
 @Component({
   selector: 'app-reasoning-part',
-  imports: [PartTimeDurationPipe, RelativeTimePipe, MarkdownUi],
+  imports: [RelativeTimePipe, MarkdownUi, CollapsibleUi, PartTimeDurationPipe],
   templateUrl: './reasoning-part.component.html',
 })
 export class ReasoningPartComponent {
