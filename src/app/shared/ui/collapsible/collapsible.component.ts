@@ -1,5 +1,5 @@
-import { Component, input, signal } from '@angular/core'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { Component, effect, input, signal } from '@angular/core'
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { ClassNames } from 'primeng/classnames'
 import { IconUi } from '../icon/icon.ui'
 
@@ -11,14 +11,27 @@ import { IconUi } from '../icon/icon.ui'
 })
 export class CollapsibleUi {
   readonly header = input.required<string>()
+  readonly collapse = input<boolean>(true)
   readonly styleClass = input<any>()
 
   protected opened = signal<boolean>(false)
+  protected triggered = signal<boolean>(false)
 
-  protected readonly faChevronDown = faChevronDown
   protected readonly faChevronUp = faChevronUp
+
+  constructor() {
+    effect(() => {
+      const collapse = this.collapse()
+      const triggerred = this.triggered()
+
+      if (!triggerred) {
+        this.opened.set(collapse)
+      }
+    })
+  }
 
   toggle() {
     this.opened.update((opened) => !opened)
+    this.triggered.set(true)
   }
 }

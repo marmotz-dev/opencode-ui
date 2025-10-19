@@ -12,13 +12,10 @@
 }
 
 ::ng-deep ul li,
+::ng-deep ol li,
 ::ng-deep ol ul li,
 ::ng-deep p {
   line-height: 1.85;
-}
-
-::ng-deep ol li {
-  line-height: 0;
 }
 
 ::ng-deep h1 {

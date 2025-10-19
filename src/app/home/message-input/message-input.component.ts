@@ -23,7 +23,9 @@ export class MessageInputComponent {
 
     if (message.length > 0) {
       this.opencodeService.prompt(message)
-      this.message = ''
+      setTimeout(() => {
+        this.message = ''
+      })
     }
   }
 }

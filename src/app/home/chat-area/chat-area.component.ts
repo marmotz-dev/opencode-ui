@@ -11,7 +11,7 @@ import { FilterValidPartsPipe } from './pipes/filter-valid-parts.pipe'
   imports: [FilterValidPartsPipe, TextPartComponent, ReasoningPartComponent, ToolPartComponent],
   templateUrl: './chat-area.component.html',
   host: {
-    class: 'block',
+    class: 'block h-full',
   },
 })
 export class ChatAreaComponent {

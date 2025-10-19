@@ -14,6 +14,6 @@ type OpencodeResponse<T, E> =
   | ({ data: T; error: undefined } & { request: Request; response: Response })
   | ({ data: undefined; error: E } & { request: Request; response: Response })
 
-export type GetCurrentSessionsResponse = OpencodeResponse<Session[], unknown>
+export type GetSessionsResponse = OpencodeResponse<Session[], unknown>
 export type CreateSessionResponse = OpencodeResponse<Session, BadRequestError>
 export type GetSessionMessagesResponse = OpencodeResponse<SessionMessage[], BadRequestError | NotFoundError>

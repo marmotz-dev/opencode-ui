@@ -1,4 +1,4 @@
-<div class="mx-auto flex max-w-7xl flex-1 flex-col gap-y-5 p-4">
+<div class="mx-auto flex h-full max-w-7xl flex-1 flex-col gap-y-5 p-4">
   @let messages = sessionMessages();
   @if (messages !== null) {
     @for (message of messages; track message) {
@@ -26,6 +26,8 @@
       }
     }
   } @else {
-    <div class="mt-10 text-center text-gray-500">Select a session to start.</div>
+    <div class="flex h-full items-center justify-center text-2xl text-gray-500 italic">
+      <div>Create or select a session to start.</div>
+    </div>
   }
 </div>

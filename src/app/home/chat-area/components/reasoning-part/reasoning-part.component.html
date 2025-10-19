@@ -3,6 +3,7 @@
 <div class="flex w-full flex-col items-start gap-y-1.5 pr-50 text-sm">
   <app-ui-collapsible
     [header]="!time.end ? 'Thinking...' : 'Thought during ' + (time | partTimeDuration) + ' seconds :'"
+    [collapse]="!time.end"
     styleClass="w-full rounded-lg border border-slate-100 bg-linear-to-b from-slate-50 to-slate-100 p-4 text-slate-700 shadow-lg"
   >
     <app-ui-markdown

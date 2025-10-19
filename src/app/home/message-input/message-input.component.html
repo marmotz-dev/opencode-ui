@@ -1,6 +1,6 @@
 <div class="flex items-end gap-x-2">
   <app-ui-textarea
-    (keydown.control.enter)="onSend()"
+    (keydown.enter)="onSend()"
     [(value)]="message"
     [autoResizeMaxHeight]="200"
     [autoResizeMinHeight]="50"
