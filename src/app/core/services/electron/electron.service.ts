@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core'
 import * as childProcess from 'child_process'
 import { ipcRenderer, webFrame } from 'electron'
 import * as fs from 'fs'
+import { Logger } from '../../../shared/logger/logger.service'
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class ElectronService {
   webFrame!: typeof webFrame
   childProcess!: typeof childProcess
   fs!: typeof fs
+  private logger = new Logger(ElectronService.name)
 
   constructor() {
     // Conditional imports
@@ -26,14 +28,16 @@ export class ElectronService {
       this.childProcess = (window as any).require('child_process')
       this.childProcess.exec('node -v', (error, stdout, stderr) => {
         if (error) {
-          console.error(`error: ${error.message}`)
+          this.logger.error(`error: ${error.message}`)
           return
         }
+
         if (stderr) {
-          console.error(`stderr: ${stderr}`)
+          this.logger.error(`stderr: ${stderr}`)
           return
         }
-        console.log(`stdout:\n${stdout}`)
+
+        this.logger.log(`stdout:\n${stdout}`)
       })
 
       // Notes :

@@ -6,12 +6,18 @@ import { OpencodeService } from './opencode.service.js'
 let win: BrowserWindow | null = null
 const args = process.argv.slice(1)
 const serve = args.some((val) => val === '--serve')
+const DEFAULT_CONFIG = {
+  title: 'OpencoDesk',
+}
 
 const configPath = path.join(app.getPath('userData'), 'config.json')
-let config: Record<string, any> = {}
+let config: Record<string, any> = DEFAULT_CONFIG
 if (fs.existsSync(configPath)) {
   const configRawContent = fs.readFileSync(configPath)
-  config = JSON.parse(configRawContent.toString() ?? '{}')
+  config = {
+    ...config,
+    ...JSON.parse(configRawContent.toString() ?? '{}'),
+  }
 }
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null
@@ -34,6 +40,7 @@ function createWindow(): BrowserWindow {
     y: config.position?.[1] ?? 0,
     width: size.width,
     height: size.height,
+    title: config.title,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: serve,
@@ -92,6 +99,13 @@ try {
   app.on('ready', async () => {
     setTimeout(async () => {
       const window = createWindow()
+
+      const updateTitleFromUrl = (_e: any, navigationEntry: string) => {
+        window.setTitle(`${config.title} - ${navigationEntry}`)
+      }
+
+      window.webContents.on('did-navigate', updateTitleFromUrl)
+      window.webContents.on('did-navigate-in-page', updateTitleFromUrl)
 
       // Set up IPC handlers for Opencode service
       const opencodeService = await OpencodeService.init(window)

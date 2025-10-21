@@ -3,15 +3,24 @@ import { Routes } from '@angular/router'
 export const mainRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'chat',
     pathMatch: 'full',
   },
   {
-    path: 'home',
-    loadComponent: () => import('./app/home/home.component').then((m) => m.HomeComponent),
+    path: 'chat',
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./app/chat/chat.component').then((m) => m.ChatComponent),
+      },
+      {
+        path: ':sessionId',
+        loadComponent: () => import('./app/chat/chat.component').then((m) => m.ChatComponent),
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'chat',
   },
 ]

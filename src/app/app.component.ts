@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '../environments/environment'
 import { ElectronService } from './core/services'
+import { Logger } from './shared/logger/logger.service'
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,8 @@ import { ElectronService } from './core/services'
   imports: [RouterOutlet],
 })
 export class AppComponent {
+  private logger = new Logger(AppComponent.name)
+
   private electronService = inject(ElectronService)
   private translate = inject(TranslateService)
 
@@ -22,15 +25,15 @@ export class AppComponent {
     this.translate.setFallbackLang('en')
 
     if (environment.env === 'development') {
-      console.log('environment', environment)
+      this.logger.debug('environment', environment)
 
       if (electronService.isElectron) {
-        console.log('Run in electron')
-        console.log('Electron ipcRenderer', this.electronService.ipcRenderer)
-        console.log('NodeJS childProcess', this.electronService.childProcess)
-        console.log('process.env', process.env)
+        this.logger.debug('Run in electron')
+        this.logger.debug('Electron ipcRenderer', this.electronService.ipcRenderer)
+        this.logger.debug('NodeJS childProcess', this.electronService.childProcess)
+        this.logger.debug('process.env', process.env)
       } else {
-        console.log('Run in browser')
+        this.logger.debug('Run in browser')
       }
     }
   }

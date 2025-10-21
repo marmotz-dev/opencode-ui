@@ -1,6 +1,6 @@
 <div class="flex items-end gap-x-2">
   <app-ui-textarea
-    (keydown.enter)="onSend()"
+    (keydown.enter)="onSend($event)"
     [(value)]="message"
     [autoResizeMaxHeight]="200"
     [autoResizeMinHeight]="50"
@@ -10,7 +10,7 @@
   />
 
   <p-button
-    (onClick)="onSend()"
+    (onClick)="onSend($event)"
     class="rounded-l-none"
     icon="pi pi-send"
     label="Send"
