@@ -10,6 +10,7 @@ import Aura from '@primeuix/themes/aura'
 import { provideMarkdown } from 'ngx-markdown'
 import { providePrimeNG } from 'primeng/config'
 import { AppComponent } from './app/app.component'
+import { Logger, LogLevel } from './app/shared/logger/logger.service'
 import { environment } from './environments/environment'
 import { mainRoutes } from './main.routes'
 import './prism'
@@ -17,6 +18,8 @@ import './prism'
 if (environment.env === 'production') {
   enableProdMode()
 }
+
+Logger.setLogLevel(LogLevel.DEBUG)
 
 bootstrapApplication(AppComponent, {
   providers: [

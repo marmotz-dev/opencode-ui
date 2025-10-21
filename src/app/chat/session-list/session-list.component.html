@@ -18,12 +18,13 @@
         [pClass]="[
           'mb-1 cursor-pointer rounded border-r-4 p-2',
           {
-            'border-emerald-400/25 bg-emerald-300/25 hover:bg-emerald-400/25': currentSessionId() === session.id,
-            'border-slate-400/25 bg-slate-300/25 hover:bg-slate-400/25': currentSessionId() !== session.id,
+            'border-emerald-400/25 bg-emerald-300/25 hover:bg-emerald-400/25': sessionId() === session.id,
+            'border-slate-400/25 bg-slate-300/25 hover:bg-slate-400/25': sessionId() !== session.id,
           },
         ]"
       >
         <div>{{ session.title }}</div>
+        <div class="text-xs">{{ session.id }}</div>
       </div>
     }
   </div>

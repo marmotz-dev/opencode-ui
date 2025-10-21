@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core'
-import { OpencodeService } from '../../shared/opencode'
+import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
 import { ReasoningPartComponent } from './components/reasoning-part/reasoning-part.component'
 import { TextPartComponent } from './components/text-part/text-part.component'
 import { ToolPartComponent } from './components/tool-part/tool-part.component'
@@ -15,7 +15,7 @@ import { FilterValidPartsPipe } from './pipes/filter-valid-parts.pipe'
   },
 })
 export class ChatAreaComponent {
-  private readonly opencodeService = inject(OpencodeService)
+  private readonly opencodeChat = inject(OpencodeChatService)
 
-  sessionMessages = this.opencodeService.sessionMessages
+  sessionMessages = this.opencodeChat.sessionMessages
 }

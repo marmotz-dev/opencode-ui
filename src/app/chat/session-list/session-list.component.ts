@@ -1,9 +1,10 @@
-import { Component, effect, inject, signal, viewChild } from '@angular/core'
+import { Component, inject, signal, viewChild } from '@angular/core'
+import { Router } from '@angular/router'
 import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button } from 'primeng/button'
 import { ClassNames } from 'primeng/classnames'
 import { ContextMenu } from 'primeng/contextmenu'
-import { OpencodeService } from '../../shared/opencode'
+import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 
 @Component({
@@ -24,34 +25,26 @@ export class SessionListComponent {
     },
   ]
   protected readonly faPlusCircle = faPlusCircle
-  private readonly opencodeService = inject(OpencodeService)
-  sessions = this.opencodeService.sessions
-  currentSessionId = this.opencodeService.currentSessionId
-
-  constructor() {
-    this.opencodeService.getSessions()
-
-    effect(() => {
-      const sessions = this.sessions()
-      const currentSessionId = this.currentSessionId()
-
-      if (sessions && sessions.length > 0 && !currentSessionId) {
-        this.opencodeService.setCurrentSessionId(sessions[0].id)
-      }
-    })
-  }
+  private readonly router = inject(Router)
+  private readonly opencodeChat = inject(OpencodeChatService)
+  sessionId = this.opencodeChat.sessionId
+  sessions = this.opencodeChat.sessions
 
   async createNewSession() {
-    const newSession = await this.opencodeService.createSession()
-    if (newSession.data?.id) {
-      this.opencodeService.setCurrentSessionId(newSession.data.id)
+    const newSession = await this.opencodeChat.createSession()
+    if (newSession?.id) {
+      await this.router.navigate(['chat', newSession.id])
     }
   }
 
   async deleteSession() {
     const sessionId = this.commandSessionId()
     if (sessionId) {
-      await this.opencodeService.deleteSession(sessionId)
+      const newSessionId = await this.opencodeChat.deleteSession(sessionId)
+
+      if (newSessionId) {
+        await this.router.navigate(['chat', newSessionId])
+      }
     }
   }
 
@@ -72,7 +65,7 @@ export class SessionListComponent {
     }
   }
 
-  selectSession(id: string) {
-    this.opencodeService.setCurrentSessionId(id)
+  async selectSession(id: string) {
+    await this.router.navigate(['chat', id])
   }
 }

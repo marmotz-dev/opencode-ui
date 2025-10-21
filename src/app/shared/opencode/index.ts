@@ -1,2 +1,2 @@
-export * from './opencode.service'
+export * from './opencode-api.service'
 export * from './opencode.types'
