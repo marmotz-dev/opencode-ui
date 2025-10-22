@@ -30,9 +30,7 @@
     "web:build": "bun run build -- -c web-production",
     "electron": "electron",
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
-    "electron:serve": "wait-on tcp:4220 && bun run electron:serve-tsc && run-p electron:serve:*",
-    "electron:serve:tsc-watch": "bun run electron:serve-tsc -w",
-    "electron:serve:run": "bunx nodemon --watch ./app -i ./app/dist ./app/node_modules --exec 'electron . --serve'",
+    "electron:serve": "wait-on tcp:4220 && bunx nodemon --watch ./app/*.ts --exec 'bun run electron:serve-tsc && electron . --serve'",
     "electron:local": "bun run build:dev && electron .",
     "electron:build": "bun run build:prod && electron-builder build --publish=never",
     "test": "ng test --watch=false",
@@ -101,6 +99,6 @@
     "webdriver-manager": "12.1.9"
   },
   "browserslist": [
-    "chrome 140"
+    "last 2 Chrome versions"
   ]
 }
