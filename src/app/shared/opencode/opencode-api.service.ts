@@ -10,7 +10,7 @@ import {
   PromptResponse,
 } from './opencode.types'
 
-type EventCallback = (event: Event) => void
+type EventCallback = (event: Event) => void | Promise<void>
 
 @Injectable({
   providedIn: 'root',
