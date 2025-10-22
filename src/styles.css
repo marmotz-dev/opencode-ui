@@ -24,6 +24,10 @@
     U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: 'Inter Variable', sans-serif;
 }

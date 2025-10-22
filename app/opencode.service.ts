@@ -6,7 +6,9 @@ export class OpencodeService {
     private readonly client: OpencodeClient,
     private readonly server: { close: () => void },
     private window: BrowserWindow
-  ) {}
+  ) {
+    this.listenEvents()
+  }
 
   static async init(window: BrowserWindow) {
     const { client, server } = await createOpencode()
@@ -46,8 +48,8 @@ export class OpencodeService {
     const events = await this.client.event.subscribe()
 
     for await (const event of events.stream) {
+      console.log(`New opencode event :`, event)
       this.window.webContents.send('opencode.event', event)
-      console.log(`Opencode event:`, event)
     }
   }
 

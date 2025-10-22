@@ -30,7 +30,7 @@
     "web:build": "bun run build -- -c web-production",
     "electron": "electron",
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
-    "electron:serve": "wait-on tcp:4220 && bunx nodemon --watch ./app/*.ts --exec 'bun run electron:serve-tsc && electron . --serve'",
+    "electron:serve": "wait-on tcp:4220 && bunx nodemon --watch ./app -e ts --exec 'bun run electron:serve-tsc && electron . --serve'",
     "electron:local": "bun run build:dev && electron .",
     "electron:build": "bun run build:prod && electron-builder build --publish=never",
     "test": "ng test --watch=false",
