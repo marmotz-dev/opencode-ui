@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 import { Button } from 'primeng/button'
 import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
@@ -15,7 +14,6 @@ import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
 })
 export class MessageInputComponent {
   protected message = ''
-  protected readonly faPaperPlane = faPaperPlane
   private readonly opencodeChat = inject(OpencodeChatService)
 
   async onSend(event: Event) {

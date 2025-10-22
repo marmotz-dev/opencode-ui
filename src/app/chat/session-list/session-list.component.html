@@ -6,7 +6,7 @@
     styleClass="w-full"
   >
     <ng-template #icon>
-      <app-ui-icon [icon]="faPlusCircle" />
+      <app-ui-icon name="plus-circle" />
     </ng-template>
   </p-button>
 
@@ -24,7 +24,9 @@
         ]"
       >
         <div>{{ session.title }}</div>
-        <div class="text-xs">{{ session.id }}</div>
+        @if (environment.env !== 'production') {
+          <div class="text-xs">{{ session.id }}</div>
+        }
       </div>
     }
   </div>
@@ -43,7 +45,7 @@
       <span class="flex-1">{{ item.label }}</span>
       <app-ui-icon
         [class]="item.iconClass ?? 'text-slate-500'"
-        [icon]="item.icon"
+        [name]="item.icon"
       />
     </a>
   </ng-template>

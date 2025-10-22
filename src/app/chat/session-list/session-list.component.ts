@@ -1,9 +1,10 @@
 import { Component, inject, signal, viewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { MenuItem } from 'primeng/api'
 import { Button } from 'primeng/button'
 import { ClassNames } from 'primeng/classnames'
 import { ContextMenu } from 'primeng/contextmenu'
+import { environment } from '../../../environments/environment'
 import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 
@@ -15,16 +16,16 @@ import { IconUi } from '../../shared/ui/icon/icon.ui'
 export class SessionListComponent {
   readonly contextMenu = viewChild<ContextMenu>('contextMenu')
   readonly commandSessionId = signal<string | null>(null)
-  contextMenuItems = [
+  contextMenuItems: MenuItem[] = [
     // { label: 'Rename', icon: faPencil },
     {
       label: 'Delete',
-      icon: faTrash,
+      icon: 'trash',
       iconClass: 'text-red-500',
       command: () => this.deleteSession(),
     },
   ]
-  protected readonly faPlusCircle = faPlusCircle
+  protected readonly environment = environment
   private readonly router = inject(Router)
   private readonly opencodeChat = inject(OpencodeChatService)
   sessionId = this.opencodeChat.sessionId

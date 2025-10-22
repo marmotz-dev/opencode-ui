@@ -2,18 +2,18 @@
 
 <div [pClass]="styleClass()">
   <div
-    class="touch-hitbox flex w-full cursor-pointer flex-row"
     (click)="toggle()"
+    class="touch-hitbox flex w-full cursor-pointer flex-row"
   >
     <div class="flex-1">
       {{ header() }}
     </div>
     <div>
       <app-ui-icon
-        [icon]="faChevronUp"
         [styleClass]="{
           '-rotate-180': isOpen,
         }"
+        name="chevron-up"
       />
     </div>
   </div>
