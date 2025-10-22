@@ -1,5 +1,4 @@
 import { Component, effect, input, signal } from '@angular/core'
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { ClassNames } from 'primeng/classnames'
 import { IconUi } from '../icon/icon.ui'
 
@@ -16,8 +15,6 @@ export class CollapsibleUi {
 
   protected opened = signal<boolean>(false)
   protected triggered = signal<boolean>(false)
-
-  protected readonly faChevronUp = faChevronUp
 
   constructor() {
     effect(() => {

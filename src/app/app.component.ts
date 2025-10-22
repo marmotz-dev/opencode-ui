@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
+import { faChevronUp, faPaperPlane, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '../environments/environment'
 import { ElectronService } from './core/services'
@@ -19,7 +21,9 @@ export class AppComponent {
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[])
 
-  constructor() {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faPaperPlane, faPlusCircle, faTrash, faChevronUp)
+
     const electronService = this.electronService
 
     this.translate.setFallbackLang('en')

@@ -1,5 +1,6 @@
 # compiled output
 /dist
+/release
 main.js
 src/**/*.js
 *.js.map

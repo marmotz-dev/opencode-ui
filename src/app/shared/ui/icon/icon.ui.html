@@ -1,0 +1,7 @@
+@let iconPrefix = prefix();
+@let iconName = name();
+
+<fa-icon
+  [icon]="iconPrefix ? [iconPrefix, iconName] : iconName"
+  [pClass]="['inline-block', styleClass()]"
+/>

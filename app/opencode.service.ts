@@ -4,15 +4,18 @@ import { BrowserWindow } from 'electron'
 export class OpencodeService {
   private constructor(
     private readonly client: OpencodeClient,
-    private readonly window: BrowserWindow
-  ) {
-    this.listenEvents()
-  }
+    private readonly server: { close: () => void },
+    private window: BrowserWindow
+  ) {}
 
   static async init(window: BrowserWindow) {
-    const { client } = await createOpencode()
+    const { client, server } = await createOpencode()
 
-    return new OpencodeService(client, window)
+    return new OpencodeService(client, server, window)
+  }
+
+  closeServer() {
+    this.server.close()
   }
 
   createSession() {
