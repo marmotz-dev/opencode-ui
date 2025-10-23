@@ -4,7 +4,7 @@ import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { OpencodeService } from './opencode.service.js'
 
-export class OpencoDesk {
+export class OpencodeUi {
   private app: Electron.App
   private ipcMain: Electron.IpcMain
   private screen: Electron.Screen
@@ -23,7 +23,7 @@ export class OpencoDesk {
     this.args = argv.slice(1)
     this.serve = this.args.some((val) => val === '--serve')
     this.config = {
-      title: 'OpencoDesk',
+      title: 'Opencode UI',
     }
     this.configPath = join(this.app.getPath('userData'), 'config.json')
     this.loadConfig()

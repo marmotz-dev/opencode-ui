@@ -1,8 +1,8 @@
 {
-  "name": "opencodesk",
+  "name": "opencode-ui",
   "version": "0.0.0",
   "description": "OpenCode Desktop Client",
-  "homepage": "https://github.com/marmotz/opencodesk",
+  "homepage": "https://github.com/marmotz/opencode-ui",
   "author": {
     "name": "Marmotz",
     "email": "contact@marmotz.dev"

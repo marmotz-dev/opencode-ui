@@ -1,5 +1,5 @@
 {
-  "name": "opencodesk-electron",
+  "name": "opencode-ui-electron",
   "version": "0.0.0",
   "main": "main.js",
   "private": true,

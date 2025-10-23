@@ -1,9 +1,9 @@
 import { app, ipcMain, screen } from 'electron'
-import { OpencoDesk } from './opencodesk.js'
+import { OpencodeUi } from './opencode-ui.js'
 
 try {
-  const opencoDesk = new OpencoDesk(process.argv, app, ipcMain, screen)
-  opencoDesk.init().catch(console.error)
+  const opencodeUi = new OpencodeUi(process.argv, app, ipcMain, screen)
+  opencodeUi.init().catch(console.error)
 } catch (e) {
   console.error(e)
 }

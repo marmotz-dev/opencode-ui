@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "opencodesk-electron",
+      "name": "opencode-ui-electron",
       "dependencies": {
         "@opencode-ai/sdk": "^0.15.5",
       },
