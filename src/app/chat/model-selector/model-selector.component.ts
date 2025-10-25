@@ -5,8 +5,7 @@ import { DialogModule } from 'primeng/dialog'
 import { InputText } from 'primeng/inputtext'
 import { ListboxModule } from 'primeng/listbox'
 import { ModelNameComponent } from '../../shared/components/model-name/model-name.component'
-import { Model } from '../../shared/opencode'
-import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
+import { Model, OpencodeChatService } from '../../shared/opencode'
 
 @Component({
   selector: 'app-model-selector',
@@ -22,7 +21,7 @@ export class ModelSelectorComponent {
 
   searchTerms = model<string>('')
   providerModels = computed(() => {
-    const providers = this.opencodeChat.providers()
+    const providers = this.opencodeChat.providers.providers()
     if (!providers) {
       return []
     }
@@ -33,8 +32,8 @@ export class ModelSelectorComponent {
         providerModels.push({
           providerID: provider.id,
           providerName: provider.name,
-          modelID: model.id,
-          modelName: model.name,
+          modelID: (model as any).id,
+          modelName: (model as any).name,
         })
       }
     }
@@ -61,7 +60,7 @@ export class ModelSelectorComponent {
   })
 
   select(model: Model) {
-    this.opencodeChat.setNextPromptModel(model)
+    this.opencodeChat.providers.setNextPromptModel(model)
     this.hide()
   }
 
@@ -72,6 +71,6 @@ export class ModelSelectorComponent {
   }
 
   hide() {
-    this.opencodeChat.closeModelSelector()
+    this.opencodeChat.providers.closeModelSelector()
   }
 }

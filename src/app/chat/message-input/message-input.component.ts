@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, model } from '@angular/core
 import { FormsModule } from '@angular/forms'
 
 import { Button } from 'primeng/button'
-import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
+import { OpencodeChatService } from '../../shared/opencode'
 
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
@@ -23,7 +23,7 @@ export class MessageInputComponent {
     const message = this.message().trim()
 
     if (message.length > 0) {
-      await this.opencodeChat.prompt(message)
+      await this.opencodeChat.messages.prompt(message)
     }
 
     setTimeout(() => {

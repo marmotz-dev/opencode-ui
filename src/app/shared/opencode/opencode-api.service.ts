@@ -57,11 +57,13 @@ export class OpencodeApiService {
 
   listenEvents() {
     this.electronService.ipcRenderer.on('opencode.event', (_e, event: Event) => {
-      this.logger.debug('New opencode event', event)
-
       const callbacks = this.eventCallbacks.get(event.type) ?? []
       for (const callback of callbacks) {
         callback(event)
+      }
+
+      if (callbacks.length === 0) {
+        this.logger.warn('Unhandled opencode event', event)
       }
     })
   }
