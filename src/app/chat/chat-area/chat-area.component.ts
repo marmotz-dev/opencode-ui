@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
-import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
+import { OpencodeChatService } from '../../shared/opencode'
 import { ReasoningPartComponent } from './components/reasoning-part/reasoning-part.component'
 import { TextPartComponent } from './components/text-part/text-part.component'
 import { ToolPartComponent } from './components/tool-part/tool-part.component'
@@ -18,5 +18,5 @@ import { FilterValidPartsPipe } from './pipes/filter-valid-parts.pipe'
 export class ChatAreaComponent {
   private readonly opencodeChat = inject(OpencodeChatService)
 
-  sessionMessages = this.opencodeChat.sessionMessages
+  sessionMessages = this.opencodeChat.messages.sessionMessages
 }

@@ -5,7 +5,7 @@ import { Button } from 'primeng/button'
 import { ClassNames } from 'primeng/classnames'
 import { ContextMenu } from 'primeng/contextmenu'
 import { environment } from '../../../environments/environment'
-import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
+import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 
 @Component({
@@ -29,11 +29,11 @@ export class SessionListComponent {
   protected readonly environment = environment
   private readonly router = inject(Router)
   private readonly opencodeChat = inject(OpencodeChatService)
-  sessionId = this.opencodeChat.sessionId
-  sessions = this.opencodeChat.sessions
+  sessionId = this.opencodeChat.sessions.sessionId
+  sessions = this.opencodeChat.sessions.sessions
 
   async createNewSession() {
-    const newSession = await this.opencodeChat.createSession()
+    const newSession = await this.opencodeChat.sessions.createSession()
     if (newSession?.id) {
       await this.router.navigate(['chat', newSession.id])
     }
@@ -42,7 +42,7 @@ export class SessionListComponent {
   async deleteSession() {
     const sessionId = this.commandSessionId()
     if (sessionId) {
-      const newSessionId = await this.opencodeChat.deleteSession(sessionId)
+      const newSessionId = await this.opencodeChat.sessions.deleteSession(sessionId)
 
       if (newSessionId) {
         await this.router.navigate(['chat', newSessionId])

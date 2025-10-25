@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop'
 import { ActivatedRoute, Router } from '@angular/router'
 import { map } from 'rxjs'
 import { Logger } from '../shared/logger/logger.service'
-import { OpencodeChatService } from '../shared/opencode/opencode-chat.service'
+import { OpencodeChatService } from '../shared/opencode'
 import { ChatAreaComponent } from './chat-area/chat-area.component'
 import { MessageInputComponent } from './message-input/message-input.component'
 import { ModelSelectorComponent } from './model-selector/model-selector.component'
@@ -28,10 +28,10 @@ export class ChatComponent {
   })
   private scrollContainer = viewChild<ElementRef<HTMLDivElement>>('scrollContainer')
 
-  private readonly sessions = this.opencodeChat.sessions
-  private readonly session = this.opencodeChat.session
-  private readonly sessionMessages = this.opencodeChat.sessionMessages
-  protected readonly modelSelectorVisible = this.opencodeChat.modelSelectorVisible
+  private readonly sessions = this.opencodeChat.sessions.sessions
+  private readonly session = this.opencodeChat.sessions.session
+  private readonly sessionMessages = this.opencodeChat.messages.sessionMessages
+  protected readonly modelSelectorVisible = this.opencodeChat.providers.modelSelectorVisible
 
   constructor() {
     this.logger.debug('ChatComponent.constructor')
@@ -55,10 +55,10 @@ export class ChatComponent {
     const sessionId = this.sessionId()
     this.logger.debug('ChatComponent.effect.loadSessionMessages', { sessionId })
 
-    this.opencodeChat.setSessionId(sessionId)
+    this.opencodeChat.sessions.setSessionId(sessionId)
 
     if (sessionId) {
-      await this.opencodeChat.loadSessionMessages()
+      await this.opencodeChat.messages.loadSessionMessages()
     }
   }
 
