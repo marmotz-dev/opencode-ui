@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, model } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 
 import { Button } from 'primeng/button'
@@ -11,22 +11,23 @@ import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
   selector: 'app-message-input',
   imports: [FormsModule, Button, IconUi, TextareaUi],
   templateUrl: './message-input.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageInputComponent {
-  protected message = ''
+  protected message = model('')
   private readonly opencodeChat = inject(OpencodeChatService)
 
   async onSend(event: Event) {
     event.preventDefault()
 
-    const message = this.message.trim()
+    const message = this.message().trim()
 
     if (message.length > 0) {
       await this.opencodeChat.prompt(message)
     }
 
     setTimeout(() => {
-      this.message = ''
+      this.message.set('')
     })
   }
 }

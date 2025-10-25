@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   effect,
   ElementRef,
@@ -17,6 +18,7 @@ import { TextareaModule } from 'primeng/textarea'
   templateUrl: './textarea.component.html',
   styleUrl: './textarea.component.css',
   host: { class: 'block' },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextareaUi {
   readonly value = model<string>('')

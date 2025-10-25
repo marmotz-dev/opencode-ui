@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 import { Message, ReasoningPart } from '@opencode-ai/sdk/client'
 import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.component'
 import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
@@ -9,6 +9,7 @@ import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
   selector: 'app-reasoning-part',
   imports: [RelativeTimePipe, MarkdownUi, CollapsibleUi, PartTimeDurationPipe],
   templateUrl: './reasoning-part.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReasoningPartComponent {
   info = input.required<Message>()

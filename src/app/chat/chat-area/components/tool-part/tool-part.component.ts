@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, computed, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core'
 import { ToolPart } from '@opencode-ai/sdk'
 import { Message } from '@opencode-ai/sdk/client'
 import { createPatch } from 'diff'
@@ -13,6 +13,7 @@ import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
   selector: 'app-tool-part',
   imports: [CommonModule, RelativeTimePipe, MarkdownUi, CollapsibleUi],
   templateUrl: './tool-part.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolPartComponent {
   info = input.required<Message>()

@@ -1,4 +1,15 @@
-import { AssistantMessage, BadRequestError, Message, NotFoundError, Part, Session } from '@opencode-ai/sdk/client'
+import {
+  Agent,
+  AssistantMessage,
+  BadRequestError,
+  Config,
+  Message,
+  NotFoundError,
+  Part,
+  Project,
+  Provider,
+  Session,
+} from '@opencode-ai/sdk/client'
 
 export type SessionMessage = {
   info: Message
@@ -15,12 +26,34 @@ export type PartTime = {
   end?: number
 }
 
+export type ProviderData = {
+  providers: Provider[]
+  default: {
+    [p: string]: string
+  }
+}
+
+export type Model = {
+  providerID: string
+  providerName: string
+  modelID: string
+  modelName: string
+}
+
 type OpencodeResponse<T, E> =
   | ({ data: T; error: undefined } & { request: Request; response: Response })
   | ({ data: undefined; error: E } & { request: Request; response: Response })
 
+export type GetAgentsResponse = OpencodeResponse<Agent[], unknown>
+export type GetConfigResponse = OpencodeResponse<Config, unknown>
+export type GetProvidersResponse = OpencodeResponse<ProviderData, unknown>
+export type GetProjectsResponse = OpencodeResponse<Project[], unknown>
+export type GetCurrentProjectResponse = OpencodeResponse<Project, unknown>
+
 export type CreateSessionResponse = OpencodeResponse<Session, BadRequestError>
 export type DeleteSessionResponse = OpencodeResponse<boolean, BadRequestError | NotFoundError>
-export type GetSessionMessagesResponse = OpencodeResponse<SessionMessage[], BadRequestError | NotFoundError>
 export type GetSessionsResponse = OpencodeResponse<Session[], unknown>
+
+export type GetSessionMessagesResponse = OpencodeResponse<SessionMessage[], BadRequestError | NotFoundError>
+
 export type PromptResponse = OpencodeResponse<SessionAssistantMessage, BadRequestError | NotFoundError>

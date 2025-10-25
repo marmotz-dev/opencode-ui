@@ -5,8 +5,14 @@ import { Logger } from '../logger/logger.service'
 import {
   CreateSessionResponse,
   DeleteSessionResponse,
+  GetAgentsResponse,
+  GetConfigResponse,
+  GetCurrentProjectResponse,
+  GetProjectsResponse,
+  GetProvidersResponse,
   GetSessionMessagesResponse,
   GetSessionsResponse,
+  Model,
   PromptResponse,
 } from './opencode.types'
 
@@ -31,6 +37,14 @@ export class OpencodeApiService {
 
   async deleteSession(id: string): Promise<DeleteSessionResponse> {
     return this.electronService.ipcRenderer.invoke('opencode.session.delete', id)
+  }
+
+  async getConfig(): Promise<GetConfigResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.config.get')
+  }
+
+  async getProviders(): Promise<GetProvidersResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.providers.get')
   }
 
   async getSessionMessages(sessionId: string): Promise<GetSessionMessagesResponse> {
@@ -65,7 +79,29 @@ export class OpencodeApiService {
     }
   }
 
-  async prompt(sessionId: string, message: string): Promise<PromptResponse> {
-    return this.electronService.ipcRenderer.invoke('opencode.session.prompt', sessionId, message)
+  async prompt(sessionId: string, message: string, model?: Model | null): Promise<PromptResponse> {
+    return this.electronService.ipcRenderer.invoke(
+      'opencode.session.prompt',
+      sessionId,
+      message,
+      model
+        ? {
+            providerID: model.providerID,
+            modelID: model.modelID,
+          }
+        : undefined
+    )
+  }
+
+  async getAgents(): Promise<GetAgentsResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.agents.get')
+  }
+
+  async getProjects(): Promise<GetProjectsResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.project.get-all')
+  }
+
+  async getCurrentProject(): Promise<GetCurrentProjectResponse> {
+    return this.electronService.ipcRenderer.invoke('opencode.project.get-current')
   }
 }

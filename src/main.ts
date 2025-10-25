@@ -1,5 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { enableProdMode } from '@angular/core'
+import { enableProdMode, provideZonelessChangeDetection } from '@angular/core'
 import { bootstrapApplication } from '@angular/platform-browser'
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
 import { provideRouter } from '@angular/router'
@@ -17,12 +17,13 @@ import './prism'
 
 if (environment.env === 'production') {
   enableProdMode()
+} else {
+  Logger.setLogLevel(LogLevel.DEBUG)
 }
-
-Logger.setLogLevel(LogLevel.DEBUG)
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideZonelessChangeDetection(),
     provideHttpClient(withInterceptorsFromDi()),
     provideTranslateService({
       loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),

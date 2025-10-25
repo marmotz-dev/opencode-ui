@@ -1,5 +1,8 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core'
 import {
+  Agent,
+  AssistantMessage,
+  Config,
   Event,
   EventMessagePartRemoved,
   EventMessagePartUpdated,
@@ -7,19 +10,38 @@ import {
   EventMessageUpdated,
   EventSessionDeleted,
   EventSessionUpdated,
+  Project,
   Session,
 } from '@opencode-ai/sdk/client'
 import { Logger } from '../logger/logger.service'
 import { OpencodeApiService } from './opencode-api.service'
-import { SessionMessage } from './opencode.types'
+import { Model, ProviderData, SessionMessage } from './opencode.types'
 
 @Injectable({
   providedIn: 'root',
 })
 export class OpencodeChatService {
-  readonly sessionId = signal<string | null>(null)
   private logger = new Logger(OpencodeChatService.name)
   private opencodeApi = inject(OpencodeApiService)
+
+  readonly _agents = signal<Agent[] | null>(null)
+  public agents = this._agents.asReadonly()
+
+  readonly _config = signal<Config | null>(null)
+  public config = this._config.asReadonly()
+
+  readonly _providers = signal<ProviderData | null>(null)
+  public providers = this._providers.asReadonly()
+
+  readonly _projects = signal<Project[] | null>(null)
+  public projects = this._projects.asReadonly()
+
+  readonly _currentProject = signal<Project | null>(null)
+  public currentProject = this._currentProject.asReadonly()
+
+  private readonly _sessionId = signal<string | null>(null)
+  public sessionId = this._sessionId.asReadonly()
+
   private _sessions = signal<Session[] | null>(null)
   public sessions = this._sessions.asReadonly()
   readonly session = computed(() => {
@@ -36,6 +58,7 @@ export class OpencodeChatService {
 
     return null
   })
+
   private _sessionsMessages = signal<Record<string, SessionMessage[]>>({})
   public sessionsMessages = this._sessionsMessages.asReadonly()
   readonly sessionMessages = computed(() => {
@@ -51,8 +74,86 @@ export class OpencodeChatService {
     return null
   })
 
+  private lastChosenPromptModel = signal<Model | null>(null)
+  private _nextPromptModel = signal<Model | null>(null)
+  public nextPromptModel = this._nextPromptModel.asReadonly()
+
+  readonly currentModel = computed<Model | null>(() => {
+    const nextPromptModel = this.nextPromptModel()
+    const lastChosenPromptModel = this.lastChosenPromptModel()
+    let messages = this.sessionMessages()
+    const sessionsMessages = this.sessionsMessages()
+    const providers = this.providers()
+
+    if (nextPromptModel) {
+      return nextPromptModel
+    }
+
+    if (!messages || messages.length === 0) {
+      messages = []
+
+      for (const sessionId in sessionsMessages) {
+        messages = messages.concat(sessionsMessages[sessionId])
+      }
+
+      messages?.sort((m1, m2) => m1.info.time.created - m2.info.time.created)
+    }
+
+    const lastMessage = messages.filter((sessionMessage) => sessionMessage.info.role === 'assistant').pop()
+    if (!lastMessage) {
+      if (lastChosenPromptModel) {
+        return this.getProviderByIds(lastChosenPromptModel.providerID, lastChosenPromptModel.modelID)
+      }
+
+      if (!providers) {
+        return null
+      }
+
+      const providerData = Object.entries(providers?.default).shift()
+
+      if (!providerData) {
+        return null
+      }
+
+      return this.getProviderByIds(...providerData)
+    }
+
+    const info = lastMessage.info as AssistantMessage
+
+    return this.getProviderByIds(info.providerID, info.modelID)
+  })
+
+  setSessionId(sessionId: string | null) {
+    if (sessionId !== this.sessionId()) {
+      this._sessionId.set(sessionId)
+      this._nextPromptModel.set(null)
+    }
+  }
+
+  getProviderByIds(providerId: string, modelId: string): Model | null {
+    const provider = this.providers()?.providers.find((provider) => provider.id === providerId)
+    if (!provider) {
+      return null
+    }
+
+    const model = provider.models[modelId]
+    if (!model) {
+      return null
+    }
+
+    return {
+      providerID: provider.id,
+      providerName: provider.name,
+      modelID: model.id,
+      modelName: model.name,
+    }
+  }
+
+  private _modelSelectorVisible = signal<boolean>(false)
+  public modelSelectorVisible = this._modelSelectorVisible.asReadonly()
+
   constructor() {
-    effect(async () => this.loadSessionsEffect())
+    effect(async () => this.initEffect())
     effect(async () => this.loadSessionMessagesEffect())
 
     this.opencodeApi.onEvent('session.updated', (event: Event) => this.onSessionUpdated(event as EventSessionUpdated))
@@ -69,28 +170,17 @@ export class OpencodeChatService {
     )
   }
 
+  setNextPromptModel(model: Model) {
+    this._nextPromptModel.set(model)
+    this.lastChosenPromptModel.set(model)
+  }
+
   async createSession(): Promise<Session | undefined> {
     const response = await this.opencodeApi.createSession()
 
     const newSession = response.data
 
     this.logger.debug('OpencodeChatService.createSession', { newSession })
-
-    this._sessions.update((sessions) => {
-      if (sessions) {
-        if (newSession) {
-          return [newSession, ...sessions]
-        }
-
-        return sessions
-      }
-
-      if (newSession) {
-        return [newSession]
-      }
-
-      return null
-    })
 
     return newSession
   }
@@ -128,7 +218,7 @@ export class OpencodeChatService {
         }
       }
 
-      this.sessionId.set(newSessionId)
+      this.setSessionId(newSessionId)
 
       return newSessionId
     }
@@ -156,8 +246,58 @@ export class OpencodeChatService {
 
   async loadSessions() {
     const response = await this.opencodeApi.getSessions()
+    const sessions = response.data ?? []
 
-    this._sessions.set(response.data ?? [])
+    this.logger.debug('loadSessions', sessions)
+
+    this._sessions.set(sessions)
+  }
+
+  async loadConfig() {
+    const response = await this.opencodeApi.getConfig()
+    const config = response.data ?? null
+
+    this.logger.debug('loadConfig', config)
+
+    this._config.set(config)
+  }
+
+  async loadAgents() {
+    const response = await this.opencodeApi.getAgents()
+    const agents = response.data ?? []
+
+    this.logger.debug('loadAgents', agents)
+
+    this._agents.set(agents)
+  }
+
+  async loadProjects() {
+    const response = await this.opencodeApi.getProjects()
+    const projects = response.data ?? []
+
+    this.logger.debug('loadProjects', projects)
+
+    this._projects.set(projects)
+  }
+
+  async loadCurrentProject() {
+    const response = await this.opencodeApi.getCurrentProject()
+    const currentProject = response.data ?? null
+
+    this.logger.debug('loadCurrentProject', currentProject)
+
+    this._currentProject.set(currentProject)
+  }
+
+  async loadProviders() {
+    const response = await this.opencodeApi.getProviders()
+    const providers = response.data ?? ({} as ProviderData)
+
+    this.logger.debug('loadProviders', providers)
+
+    this._providers.set(providers)
+
+    return providers
   }
 
   async prompt(message: string) {
@@ -177,7 +317,8 @@ export class OpencodeChatService {
       this.logger.debug('OpencodeChatService.prompt.createSession', { message, sessionId })
     }
 
-    this.opencodeApi.prompt(sessionId, message).then((response) => {
+    const model = this.currentModel()
+    this.opencodeApi.prompt(sessionId, message, model).then((response) => {
       this.logger.debug('OpencodeChatService.prompt.response', { message, sessionId, response })
     })
   }
@@ -191,9 +332,13 @@ export class OpencodeChatService {
     }
   }
 
-  private async loadSessionsEffect() {
+  private async initEffect() {
     await this.loadSessions()
-    this.logger.debug('OpencodeChatService.effect.loadSessions', { sessions: this.sessions() })
+    await this.loadConfig()
+    await this.loadProviders()
+    await this.loadAgents()
+    await this.loadProjects()
+    await this.loadCurrentProject()
   }
 
   private onMessagePartRemoved(event: EventMessagePartRemoved) {
@@ -308,7 +453,7 @@ export class OpencodeChatService {
     })
 
     if (this.sessionId() === sessionId) {
-      this.sessionId.set(null)
+      this.setSessionId(null)
     }
   }
 
@@ -328,5 +473,13 @@ export class OpencodeChatService {
 
       return [...sessions]
     })
+  }
+
+  openModelSelector() {
+    this._modelSelectorVisible.set(true)
+  }
+
+  closeModelSelector() {
+    this._modelSelectorVisible.set(false)
   }
 }
