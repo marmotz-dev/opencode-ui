@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 import { OpencodeChatService } from '../../shared/opencode/opencode-chat.service'
 import { ReasoningPartComponent } from './components/reasoning-part/reasoning-part.component'
 import { TextPartComponent } from './components/text-part/text-part.component'
@@ -13,6 +13,7 @@ import { FilterValidPartsPipe } from './pipes/filter-valid-parts.pipe'
   host: {
     class: 'block h-full',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatAreaComponent {
   private readonly opencodeChat = inject(OpencodeChatService)

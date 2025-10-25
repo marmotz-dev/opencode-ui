@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 import { MarkdownComponent } from 'ngx-markdown'
 
 @Component({
@@ -11,6 +11,7 @@ import { MarkdownComponent } from 'ngx-markdown'
     />
   `,
   styleUrls: ['./markdown.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkdownUi {
   data = input.required<string>()

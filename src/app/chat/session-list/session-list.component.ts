@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { MenuItem } from 'primeng/api'
 import { Button } from 'primeng/button'
@@ -12,6 +12,7 @@ import { IconUi } from '../../shared/ui/icon/icon.ui'
   selector: 'app-session-list',
   imports: [Button, ClassNames, IconUi, ContextMenu],
   templateUrl: './session-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SessionListComponent {
   readonly contextMenu = viewChild<ContextMenu>('contextMenu')

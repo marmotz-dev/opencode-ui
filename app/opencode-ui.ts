@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { OpencodeService } from './opencode.service.js'
+import { Model } from './opencode.types.js'
 
 export class OpencodeUi {
   private app: Electron.App
@@ -163,6 +164,9 @@ export class OpencodeUi {
   }
 
   private setupIPC() {
+    this.ipcMain.handle('opencode.agents.get', () => this.opencodeService.getAgents())
+    this.ipcMain.handle('opencode.config.get', () => this.opencodeService.getConfig())
+    this.ipcMain.handle('opencode.providers.get', () => this.opencodeService.getProviders())
     this.ipcMain.handle('opencode.session.create', () => this.opencodeService.createSession())
     this.ipcMain.handle('opencode.session.delete', (_event, sessionId: string) =>
       this.opencodeService.deleteSession(sessionId)
@@ -171,8 +175,10 @@ export class OpencodeUi {
     this.ipcMain.handle('opencode.session.messages.get-all', (_event, sessionId: string) =>
       this.opencodeService.getSessionMessages(sessionId)
     )
-    this.ipcMain.handle('opencode.session.prompt', (_event, sessionId: string, message: string) =>
-      this.opencodeService.prompt(sessionId, message)
+    this.ipcMain.handle('opencode.session.prompt', (_event, sessionId: string, message: string, model?: Model) =>
+      this.opencodeService.prompt(sessionId, message, model)
     )
+    this.ipcMain.handle('opencode.project.get-all', () => this.opencodeService.getProjects())
+    this.ipcMain.handle('opencode.project.get-current', () => this.opencodeService.getCurrentProject())
   }
 }

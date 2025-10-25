@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
-import { faChevronUp, faPaperPlane, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faPaperPlane, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '../environments/environment'
 import { ElectronService } from './core/services'
@@ -22,7 +22,7 @@ export class AppComponent {
   constructor(...args: unknown[])
 
   constructor(library: FaIconLibrary) {
-    library.addIcons(faPaperPlane, faPlusCircle, faTrash, faChevronUp)
+    library.addIcons(faPaperPlane, faPlusCircle, faTrash, faChevronUp, faPencil)
 
     const electronService = this.electronService
 

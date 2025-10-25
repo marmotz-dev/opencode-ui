@@ -1,4 +1,4 @@
-import { Component, effect, input, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core'
 import { ClassNames } from 'primeng/classnames'
 import { IconUi } from '../icon/icon.ui'
 
@@ -7,6 +7,7 @@ import { IconUi } from '../icon/icon.ui'
   imports: [IconUi, ClassNames],
   templateUrl: './collapsible.component.html',
   styleUrl: './collapsible.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollapsibleUi {
   readonly header = input.required<string>()

@@ -1,5 +1,6 @@
 import { createOpencode, OpencodeClient } from '@opencode-ai/sdk'
 import { BrowserWindow } from 'electron'
+import { Model } from './opencode.types.js'
 
 export class OpencodeService {
   private constructor(
@@ -32,8 +33,28 @@ export class OpencodeService {
     })
   }
 
+  getConfig() {
+    return this.client.config.get()
+  }
+
+  getAgents() {
+    return this.client.app.agents()
+  }
+
   getCurrentSessions() {
     return this.client.session.list()
+  }
+
+  getProjects() {
+    return this.client.project.list()
+  }
+
+  getCurrentProject() {
+    return this.client.project.current()
+  }
+
+  getProviders() {
+    return this.client.config.providers()
   }
 
   getSessionMessages(sessionId: string) {
@@ -53,12 +74,13 @@ export class OpencodeService {
     }
   }
 
-  prompt(sessionId: string, message: string) {
+  prompt(sessionId: string, message: string, model?: Model) {
     return this.client.session.prompt({
       path: {
         id: sessionId,
       },
       body: {
+        model,
         parts: [
           {
             type: 'text',
