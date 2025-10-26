@@ -15,8 +15,7 @@ describe('IconUi', () => {
     fixture = TestBed.createComponent(IconUi)
     component = fixture.componentInstance
 
-    // Provide required input using componentRef.setInput
-    fixture.componentRef.setInput('icon', faHome)
+    fixture.componentRef.setInput('name', faHome)
 
     fixture.detectChanges()
   })

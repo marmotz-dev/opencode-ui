@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core'
-import { ToolPart } from '@opencode-ai/sdk'
-import { Message } from '@opencode-ai/sdk/client'
+import { Message, ToolPart } from '@opencode-ai/sdk/client'
 import { createPatch } from 'diff'
 import stripAnsi from 'strip-ansi'
 import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.component'

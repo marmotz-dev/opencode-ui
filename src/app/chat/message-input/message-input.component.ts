@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, model } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, model } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 
 import { Button } from 'primeng/button'
@@ -16,6 +16,14 @@ import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
 export class MessageInputComponent {
   protected message = model('')
   private readonly opencodeChat = inject(OpencodeChatService)
+  private destroyRef = inject(DestroyRef)
+  private timer?: ReturnType<typeof setTimeout>
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      clearTimeout(this.timer)
+    })
+  }
 
   async onSend(event: Event) {
     event.preventDefault()
@@ -26,7 +34,7 @@ export class MessageInputComponent {
       await this.opencodeChat.messages.prompt(message)
     }
 
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.message.set('')
     })
   }

@@ -4,11 +4,11 @@
     "": {
       "name": "opencode-ui-electron",
       "dependencies": {
-        "@opencode-ai/sdk": "^0.15.5",
+        "@opencode-ai/sdk": "^0.15.18",
       },
     },
   },
   "packages": {
-    "@opencode-ai/sdk": ["@opencode-ai/sdk@0.15.5", "", {}, "sha512-V29hOqlUT0yuCA2dIkU1Sub9RjceaJug0UowEpIJKCU4kdFxHyl4HGGCdWA8UOPUMIQ+HHNoYhnMSdTlN/kLgg=="],
+    "@opencode-ai/sdk": ["@opencode-ai/sdk@0.15.18", "", {}, "sha512-zijPra2D0kGqB5ftK1rVeaooNRs0dY+sWYuWyqyGNCb8OcCqjtGHQiOyz3xZ0fDGF0VYd6fhr92qX0PhXoeLVQ=="],
   }
 }

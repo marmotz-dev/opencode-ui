@@ -9,7 +9,6 @@ import { Model, OpencodeChatService } from '../../shared/opencode'
 
 @Component({
   selector: 'app-model-selector',
-  standalone: true,
   imports: [DialogModule, ListboxModule, ButtonModule, InputText, FormsModule, ModelNameComponent],
   templateUrl: './model-selector.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
