@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main, develop]
+    tags: ['*']
   pull_request:
     branches: [main, develop]
 
@@ -24,3 +25,106 @@ jobs:
 
       - name: Run tests
         run: bun run test
+
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build app
+        run: bun run build:prod
+
+      - name: Build Electron for ${{ matrix.os }}
+        shell: bash
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            bunx electron-builder build --publish=never --linux
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            bunx electron-builder build --publish=never --win
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            bunx electron-builder build --publish=never --mac
+          fi
+
+      - name: Upload Linux files
+        uses: actions/upload-artifact@v4
+        with:
+          name: opencode-ui-linux
+          path: |
+            release/*.AppImage
+            release/*.deb
+            release/*.rpm
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Upload MacOS file
+        uses: actions/upload-artifact@v4
+        with:
+          name: opencode-ui-mac
+          path: release/*.dmg
+        if: matrix.os == 'macos-latest'
+
+      - name: Upload Windows file
+        uses: actions/upload-artifact@v4
+        with:
+          name: opencode-ui-windows
+          path: release/*.exe
+        if: matrix.os == 'windows-latest'
+
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Linux files
+        uses: actions/download-artifact@v4
+        with:
+          name: opencode-ui-linux
+          path: artifacts/
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Download MacOS files
+        uses: actions/download-artifact@v4
+        with:
+          name: opencode-ui-mac
+          path: artifacts/
+        if: matrix.os == 'macos-latest'
+
+      - name: Download Windows files
+        uses: actions/download-artifact@v4
+        with:
+          name: opencode-ui-windows
+          path: artifacts/
+        if: matrix.os == 'windows-latest'
+
+      - name: create release
+        if: matrix.os == 'ubuntu-latest'
+        run: gh release create ${{ github.ref_name }} --generate-notes
+
+      - name: upload linux files to release
+        if: matrix.os == 'ubuntu-latest'
+        run: gh release upload ${{ github.ref_name }} artifacts/*.appimage artifacts/*.deb artifacts/*.rpm
+
+      - name: upload mac file to release
+        if: matrix.os == 'macos-latest'
+        run: gh release upload ${{ github.ref_name }} artifacts/*.dmg
+
+      - name: upload windows file to release
+        if: matrix.os == 'windows-latest'
+        run: gh release upload ${{ github.ref_name }} artifacts/*.exe

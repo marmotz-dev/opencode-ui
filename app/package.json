@@ -1,9 +1,13 @@
 {
   "name": "opencode-ui-electron",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "main.js",
   "private": true,
   "type": "module",
+  "author": {
+    "name": "Marmotz",
+    "email": "contact@marmotz.dev"
+  },
   "dependencies": {
     "@opencode-ai/sdk": "^0.15.18"
   },

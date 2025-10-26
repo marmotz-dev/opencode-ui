@@ -17,7 +17,7 @@
   ],
   "win": {
     "icon": "dist/assets/icons",
-    "target": ["portable"]
+    "target": ["nsis"]
   },
   "mac": {
     "icon": "dist/assets/icons",
@@ -25,6 +25,6 @@
   },
   "linux": {
     "icon": "dist/assets/icons",
-    "target": ["AppImage"]
+    "target": ["deb", "rpm", "AppImage"]
   }
 }

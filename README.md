@@ -54,9 +54,9 @@ To build the project from Git:
 
 For production builds:
 
-- Linux: `npm run build:linux`
-- Windows: `npm run build:win`
-- macOS: `npm run build:mac`
+- Linux: `npm run electron:build:linux`
+- Windows: `npm run electron:build:win`
+- macOS: `npm run electron:build:mac`
 
 Refer to `package.json` for additional scripts and details.
 
