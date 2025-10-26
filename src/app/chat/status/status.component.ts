@@ -6,7 +6,6 @@ import { IconUi } from '../../shared/ui/icon/icon.ui'
 
 @Component({
   selector: 'app-status',
-  standalone: true,
   imports: [ButtonModule, IconUi, ModelNameComponent],
   templateUrl: './status.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,7 +1,7 @@
-const esModules = [].join('|');
+const esModules = ''
 
 module.exports = {
-  rootDir : './src',
+  rootDir: './src',
   transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esModules})`],
   transform: {
     '^.+\\.tsx?$': [
@@ -12,4 +12,4 @@ module.exports = {
     ],
     '^.+\\.js$': 'babel-jest',
   },
-};
+}

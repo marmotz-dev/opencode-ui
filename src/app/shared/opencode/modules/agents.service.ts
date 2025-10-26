@@ -1,5 +1,5 @@
 import { effect, inject, Injectable, signal } from '@angular/core'
-import { Agent } from '@opencode-ai/sdk/client'
+import { Agent } from '@opencode-ai/sdk'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
 

@@ -1,9 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ],
+    "schematicCollections": ["@angular-eslint/schematics"],
     "analytics": false
   },
   "version": 1,
@@ -30,7 +28,6 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
             "inlineStyleLanguage": "css",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["node_modules/prismjs/themes/prism-okaidia.css", "src/styles.css"],
@@ -130,7 +127,6 @@
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
-            "polyfills": ["src/polyfills-test.ts"],
             "tsConfig": "src/tsconfig.spec.json",
             "globalMocks": ["styleTransform", "matchMedia", "getComputedStyle"]
           }

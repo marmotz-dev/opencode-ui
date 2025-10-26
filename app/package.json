@@ -5,6 +5,10 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@opencode-ai/sdk": "^0.15.5"
+    "@opencode-ai/sdk": "^0.15.18"
+  },
+  "scripts": {
+    "update:minor": "bunx npm-check-updates -i -t minor",
+    "update:latest": "bunx npm-check-updates -i -t latest"
   }
 }
