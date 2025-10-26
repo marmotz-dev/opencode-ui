@@ -1,6 +1,6 @@
 {
   "name": "opencode-ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "OpenCode Desktop Client",
   "homepage": "https://github.com/marmotz/opencode-ui",
   "author": {
@@ -18,9 +18,9 @@
   "private": true,
   "scripts": {
     "app": "bun --cwd=app",
-    "postinstall": "run-p postinstall:*",
+    "postinstall": "bun run postinstall:electron && bun run postinstall:fonts",
     "postinstall:electron": "electron-builder install-app-deps",
-    "postinstall:fonts": "cp ./node_modules/@fontsource-variable/*/files/*-latin-wght-normal.woff2 src/assets/fonts/",
+    "postinstall:fonts": "bun -e \"import {$} from 'bun'; await $`cp ./node_modules/@fontsource-variable/*/files/*-latin-wght-normal.woff2 src/assets/fonts/`; // 1256\"",
     "ng": "ng",
     "start": "run-p electron:serve ng:serve",
     "ng:serve": "ng serve -c web --port 4220",
@@ -32,15 +32,20 @@
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
     "electron:serve": "wait-on tcp:4220 && bunx nodemon --watch ./app -e ts --exec 'bun run electron:serve-tsc && electron . --serve'",
     "electron:local": "bun run build:dev && electron .",
-    "electron:build": "bun run build:prod && electron-builder build --publish=never",
+    "electron:build": "bun run build:prod && electron-builder build --publish=never --win --mac --linux",
+    "electron:build:win": "bun run build:prod && electron-builder build --publish=never --win",
+    "electron:build:mac": "bun run build:prod && electron-builder build --publish=never --mac",
+    "electron:build:linux": "bun run build:prod && electron-builder build --publish=never --linux",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
     "e2e": "bun run build:prod && playwright test -c e2e/playwright.config.ts e2e/",
     "e2e:show-trace": "playwright show-trace e2e/tracing/trace.zip",
-    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "update:minor": "bunx npm-check-updates -i -t minor",
-    "update:latest": "bunx npm-check-updates -i -t latest"
+    "update:latest": "bunx npm-check-updates -i -t latest",
+    "bump:patch": "bunx bumpp --release patch package.json app/package.json",
+    "bump:minor": "bunx bumpp --release minor package.json app/package.json",
+    "bump:major": "bunx bumpp --release major package.json app/package.json"
   },
   "dependencies": {
     "@angular/common": "20.3.7",
