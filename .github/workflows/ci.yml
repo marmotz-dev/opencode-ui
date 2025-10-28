@@ -133,8 +133,11 @@ jobs:
     container:
       image: archlinux:latest
     steps:
-      - name: Setup pacman
-        run: pacman -Syu --noconfirm base-devel git openssh
+      - name: Setup pacman and create build user
+        run: |
+          pacman -Syu --noconfirm base-devel git openssh
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
       - name: Setup SSH for AUR
         run: |
@@ -174,7 +177,8 @@ jobs:
       - name: Generate .SRCINFO
         run: |
           cd aur
-          makepkg --printsrcinfo > .SRCINFO
+          chown -R builder:builder .
+          sudo -u builder makepkg --printsrcinfo > .SRCINFO
 
       - name: Commit and push to AUR
         run: |
