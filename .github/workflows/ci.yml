@@ -171,7 +171,7 @@ jobs:
         run: |
           cd aur
           sed -i "s/pkgver=.*/pkgver=${{ steps.version.outputs.version }}/" PKGBUILD
-          sed -i "s/sha256sums=.*/sha256sums=('${{ steps.sha256.outputs.sha256 }}')/" PKGBUILD
+          sed -i "/sha256sums=/,/^)/c\\sha256sums=(\n  '${{ steps.sha256.outputs.sha256 }}'\n)" PKGBUILD
           sed -i "s/pkgrel=.*/pkgrel=1/" PKGBUILD
 
       - name: Generate .SRCINFO
