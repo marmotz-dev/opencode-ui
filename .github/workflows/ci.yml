@@ -162,7 +162,7 @@ jobs:
         run: |
           cd artifacts/linux
           SHA=$(sha256sum opencode-ui-*.AppImage | cut -d' ' -f1)
-          echo "$SHA" >> $GITHUB_OUTPUT
+          echo "sha256=$SHA" >> $GITHUB_OUTPUT
 
       - name: Update PKGBUILD
         run: |
