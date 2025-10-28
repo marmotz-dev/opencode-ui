@@ -128,6 +128,7 @@ jobs:
 
   aur-release:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') || github.event_name == 'pull_request' # for tests in PR
     needs: build
     runs-on: ubuntu-latest
     container:
@@ -141,18 +142,30 @@ jobs:
 
       - name: Setup SSH for AUR
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.AUR_SSH_KEY }}" > ~/.ssh/aur_key
-          chmod 600 ~/.ssh/aur_key
-          ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts
-          git config --global core.sshCommand "ssh -i ~/.ssh/aur_key -o StrictHostKeyChecking=no"
+          mkdir -p /home/builder/.ssh
+          echo "${{ secrets.AUR_SSH_KEY }}" > /home/builder/.ssh/aur_key
+          chmod 600 /home/builder/.ssh/aur_key
+          ssh-keyscan aur.archlinux.org >> /home/builder/.ssh/known_hosts
+          chown -R builder:builder /home/builder/.ssh
+          sudo -u builder git config --global core.sshCommand "ssh -i /home/builder/.ssh/aur_key -o StrictHostKeyChecking=no"
 
       - name: Checkout AUR repo
-        run: git clone ssh://aur@aur.archlinux.org/opencode-ui-bin.git aur
+        run: |
+          mkdir aur
+          chown builder:builder aur
+          chmod 0755 aur
+          sudo -u builder git clone ssh://aur@aur.archlinux.org/opencode-ui-bin.git aur || (echo "Clone failed, listing directory:" && ls -la && exit 1)
+          sudo -u builder git -C aur config user.email "contact@marmotz.dev"
+          sudo -u builder git -C aur config user.name "Marmotz"
 
       - name: Get version from tag
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          else
+            echo "version=0.0.0.pr${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Download Linux files
         uses: actions/download-artifact@v4
@@ -169,22 +182,16 @@ jobs:
 
       - name: Update PKGBUILD
         run: |
-          cd aur
-          sed -i "s/pkgver=.*/pkgver=${{ steps.version.outputs.version }}/" PKGBUILD
-          sed -i "/sha256sums=/,/^)/c\\sha256sums=(\n  '${{ steps.sha256.outputs.sha256 }}'\n)" PKGBUILD
-          sed -i "s/pkgrel=.*/pkgrel=1/" PKGBUILD
+          sudo -u builder sed -i "s|pkgver=.*|pkgver=${{ steps.version.outputs.version }}|" aur/PKGBUILD
+          sudo -u builder sed -i "/sha256sums=/,/^)/c\\sha256sums=(\n  '${{ steps.sha256.outputs.sha256 }}'\n)" aur/PKGBUILD
+          sudo -u builder sed -i "s/pkgrel=.*/pkgrel=1/" aur/PKGBUILD
 
       - name: Generate .SRCINFO
         run: |
-          cd aur
-          chown -R builder:builder .
-          sudo -u builder makepkg --printsrcinfo > .SRCINFO
+          sudo -u builder bash -c "cd aur && makepkg --printsrcinfo" > aur/.SRCINFO
 
       - name: Commit and push to AUR
         run: |
-          cd aur
-          git config user.email "contact@marmotz.dev"
-          git config user.name "Marmotz"
-          git add PKGBUILD .SRCINFO
-          git commit -m "Update to ${{ steps.version.outputs.version }}"
-          git push
+          sudo -u builder git -C aur add PKGBUILD .SRCINFO
+          sudo -u builder git -C aur commit -m "Update to ${{ steps.version.outputs.version }}"
+          sudo -u builder git -C aur push
