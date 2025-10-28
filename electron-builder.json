@@ -1,7 +1,7 @@
 {
   "appId": "dev.marmotz.opencode-ui",
   "productName": "opencode-ui",
-  "asar": false,
+  "asar": true,
   "directories": {
     "output": "release/"
   },
@@ -17,15 +17,15 @@
     }
   ],
   "win": {
-    "icon": "dist/assets/icons",
+    "icon": "dist/assets/icons/opencode-ui.png",
     "target": ["nsis"]
   },
   "mac": {
-    "icon": "dist/assets/icons",
+    "icon": "dist/assets/icons/opencode-ui.png",
     "target": ["dmg"]
   },
   "linux": {
-    "icon": "dist/assets/icons",
+    "icon": "dist/assets/icons/opencode-ui.png",
     "target": ["deb", "rpm", "AppImage"],
     "category": "Development;IDE;",
     "desktop": {
