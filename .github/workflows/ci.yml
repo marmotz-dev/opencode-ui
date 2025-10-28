@@ -145,10 +145,7 @@ jobs:
           git config --global core.sshCommand "ssh -i ~/.ssh/aur_key -o StrictHostKeyChecking=no"
 
       - name: Checkout AUR repo
-        uses: actions/checkout@v4
-        with:
-          repository: 'ssh://aur@aur.archlinux.org/opencode-ui-bin.git'
-          path: 'aur'
+        run: git clone ssh://aur@aur.archlinux.org/opencode-ui-bin.git aur
 
       - name: Get version from tag
         id: version
