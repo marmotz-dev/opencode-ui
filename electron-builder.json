@@ -1,6 +1,7 @@
 {
+  "appId": "dev.marmotz.opencode-ui",
   "productName": "opencode-ui",
-  "asar": true,
+  "asar": false,
   "directories": {
     "output": "release/"
   },
@@ -25,6 +26,16 @@
   },
   "linux": {
     "icon": "dist/assets/icons",
-    "target": ["deb", "rpm", "AppImage"]
+    "target": ["deb", "rpm", "AppImage"],
+    "category": "Development;IDE;",
+    "desktop": {
+      "entry": {
+        "Name": "OpenCode UI",
+        "Comment": "OpenCode Desktop Client - AI coding agent",
+        "Keywords": "ai;coding;agent;development;",
+        "StartupWMClass": "opencode-ui",
+        "StartupNotify": true
+      }
+    }
   }
 }

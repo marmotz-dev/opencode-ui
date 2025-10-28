@@ -124,3 +124,65 @@ jobs:
 
       - name: upload windows file to release
         run: gh release upload ${{ github.ref_name }} artifacts/windows/*.exe
+
+  aur-release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Setup pacman
+        run: pacman -Syu --noconfirm base-devel git openssh
+
+      - name: Setup SSH for AUR
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AUR_SSH_KEY }}" > ~/.ssh/aur_key
+          chmod 600 ~/.ssh/aur_key
+          ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts
+          git config --global core.sshCommand "ssh -i ~/.ssh/aur_key -o StrictHostKeyChecking=no"
+
+      - name: Checkout AUR repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'ssh://aur@aur.archlinux.org/opencode-ui-bin.git'
+          path: 'aur'
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Download Linux files
+        uses: actions/download-artifact@v4
+        with:
+          name: opencode-ui-linux
+          path: artifacts/linux
+
+      - name: Calculate sha256sum
+        id: sha256
+        run: |
+          cd artifacts/linux
+          SHA=$(sha256sum opencode-ui-*.AppImage | cut -d' ' -f1)
+          echo "$SHA" >> $GITHUB_OUTPUT
+
+      - name: Update PKGBUILD
+        run: |
+          cd aur
+          sed -i "s/pkgver=.*/pkgver=${{ steps.version.outputs.version }}/" PKGBUILD
+          sed -i "s/sha256sums=.*/sha256sums=('${{ steps.sha256.outputs.sha256 }}')/" PKGBUILD
+          sed -i "s/pkgrel=.*/pkgrel=1/" PKGBUILD
+
+      - name: Generate .SRCINFO
+        run: |
+          cd aur
+          makepkg --printsrcinfo > .SRCINFO
+
+      - name: Commit and push to AUR
+        run: |
+          cd aur
+          git config user.email "contact@marmotz.dev"
+          git config user.name "Marmotz"
+          git add PKGBUILD .SRCINFO
+          git commit -m "Update to ${{ steps.version.outputs.version }}"
+          git push
