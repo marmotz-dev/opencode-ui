@@ -7,13 +7,21 @@ import { OpencodeChatService } from '../shared/opencode'
 import { ChatAreaComponent } from './chat-area/chat-area.component'
 import { MessageInputComponent } from './message-input/message-input.component'
 import { ModelSelectorComponent } from './model-selector/model-selector.component'
+import { ProjectSelectorComponent } from './project-selector/project-selector.component'
 import { SessionListComponent } from './session-list/session-list.component'
 import { StatusComponent } from './status/status.component'
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  imports: [SessionListComponent, ChatAreaComponent, MessageInputComponent, ModelSelectorComponent, StatusComponent],
+  imports: [
+    SessionListComponent,
+    ChatAreaComponent,
+    MessageInputComponent,
+    ModelSelectorComponent,
+    StatusComponent,
+    ProjectSelectorComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent {
@@ -32,9 +40,11 @@ export class ChatComponent {
   private readonly session = this.opencodeChat.sessions.session
   private readonly sessionMessages = this.opencodeChat.messages.sessionMessages
   protected readonly modelSelectorVisible = this.opencodeChat.providers.modelSelectorVisible
+  protected readonly projectSelectorVisible = this.opencodeChat.projects.projectSelectorVisible
+  protected readonly currentProject = this.opencodeChat.projects.currentProject
 
   constructor() {
-    this.logger.debug('ChatComponent.constructor')
+    this.logger.debug('constructor')
 
     effect(async () => this.loadSessionMessagesEffect())
     effect(async () => this.goToRootIfNoSessionEffect())
@@ -44,7 +54,7 @@ export class ChatComponent {
 
   private async goToRootIfNoSessionEffect() {
     const session = this.session()
-    this.logger.debug('ChatComponent.effect.goToRootIfNoSession', { session })
+    this.logger.debug('effect.goToRootIfNoSession', { session })
 
     if (!session) {
       await this.router.navigate(['chat'])
@@ -52,20 +62,21 @@ export class ChatComponent {
   }
 
   private async loadSessionMessagesEffect() {
+    const currentProject = this.currentProject()
     const sessionId = this.sessionId()
-    this.logger.debug('ChatComponent.effect.loadSessionMessages', { sessionId })
+    this.logger.debug('effect.loadSessionMessages', { currentProject, sessionId })
+
+    if (!currentProject) {
+      return
+    }
 
     this.opencodeChat.sessions.setSessionId(sessionId)
-
-    if (sessionId) {
-      await this.opencodeChat.messages.loadSessionMessages()
-    }
   }
 
   private async navigateToFirstEffect() {
     const sessionId = this.sessionId()
     const sessions = this.sessions()
-    this.logger.debug('ChatComponent.effect.navigateToFirst', { sessionId, sessions })
+    this.logger.debug('effect.navigateToFirst', { sessionId, sessions })
 
     if (sessions && sessions.length && !sessionId) {
       await this.router.navigate(['chat', sessions[0].id])
@@ -84,7 +95,7 @@ export class ChatComponent {
   private scrollToBottomEffect() {
     const sessionId = this.sessionId()
     const sessionMessages = this.sessionMessages()
-    this.logger.debug('ChatComponent.effect.scrollToBottom', { sessionId, sessionMessages })
+    this.logger.debug('effect.scrollToBottom', { sessionId, sessionMessages })
 
     if (sessionId && sessionMessages?.length) {
       this.scrollToBottom()

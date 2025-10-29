@@ -10,14 +10,8 @@
   "arrowParens": "always",
   "proseWrap": "preserve",
   "endOfLine": "lf",
-  "plugins": [
-    "prettier-plugin-organize-imports",
-    "prettier-plugin-tailwindcss"
-  ],
-  "tailwindAttributes": [
-    "styleClass",
-    "pClass"
-  ],
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"],
+  "tailwindAttributes": ["styleClass", "pClass"],
   "overrides": [
     {
       "files": "*.html",

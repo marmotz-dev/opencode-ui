@@ -9,10 +9,13 @@ import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 
 @Component({
-  selector: 'app-session-list',
+  selector: 'app-sessions-list',
   imports: [Button, ClassNames, IconUi, ContextMenu],
   templateUrl: './session-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'h-full',
+  },
 })
 export class SessionListComponent {
   readonly contextMenu = viewChild<ContextMenu>('contextMenu')

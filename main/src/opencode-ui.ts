@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { App, BrowserWindow, dialog, IpcMain, Screen } from 'electron'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
@@ -6,9 +6,9 @@ import { OpencodeService } from './opencode.service.js'
 import { Model } from './opencode.types.js'
 
 export class OpencodeUi {
-  private app: Electron.App
-  private ipcMain: Electron.IpcMain
-  private screen: Electron.Screen
+  private app: App
+  private ipcMain: IpcMain
+  private screen: Screen
   private win: BrowserWindow | null = null
   private opencodeService!: OpencodeService
   private args: string[]
@@ -17,7 +17,7 @@ export class OpencodeUi {
   private readonly configPath: string
   private saveTimer: ReturnType<typeof setTimeout> | null = null
 
-  constructor(argv: string[], app: Electron.App, ipcMain: Electron.IpcMain, screen: Electron.Screen) {
+  constructor(argv: string[], app: App, ipcMain: IpcMain, screen: Screen) {
     this.app = app
     this.ipcMain = ipcMain
     this.screen = screen
@@ -164,21 +164,30 @@ export class OpencodeUi {
   }
 
   private setupIPC() {
+    this.ipcMain.handle('select-directory', async () => {
+      const result = await dialog.showOpenDialog(this.win!, { properties: ['openDirectory'] })
+
+      return result.canceled ? null : result.filePaths[0]
+    })
+
     this.ipcMain.handle('opencode.agents.get', () => this.opencodeService.getAgents())
     this.ipcMain.handle('opencode.config.get', () => this.opencodeService.getConfig())
     this.ipcMain.handle('opencode.providers.get', () => this.opencodeService.getProviders())
     this.ipcMain.handle('opencode.session.create', () => this.opencodeService.createSession())
-    this.ipcMain.handle('opencode.session.delete', (_event, sessionId: string) =>
+    this.ipcMain.handle('opencode.session.delete', (_, sessionId: string) =>
       this.opencodeService.deleteSession(sessionId)
     )
-    this.ipcMain.handle('opencode.session.get-all', () => this.opencodeService.getCurrentSessions())
-    this.ipcMain.handle('opencode.session.messages.get-all', (_event, sessionId: string) =>
+    this.ipcMain.handle('opencode.session.messages.get-all', (_, sessionId: string) =>
       this.opencodeService.getSessionMessages(sessionId)
     )
-    this.ipcMain.handle('opencode.session.prompt', (_event, sessionId: string, message: string, model?: Model) =>
+    this.ipcMain.handle('opencode.session.prompt', (_, sessionId: string, message: string, model?: Model) =>
       this.opencodeService.prompt(sessionId, message, model)
     )
+    this.ipcMain.handle('opencode.path.get', () => this.opencodeService.getPath())
     this.ipcMain.handle('opencode.project.get-all', () => this.opencodeService.getProjects())
     this.ipcMain.handle('opencode.project.get-current', () => this.opencodeService.getCurrentProject())
+    this.ipcMain.handle('opencode.project.sessions', (_, projectPath: string) =>
+      this.opencodeService.getProjectSessions(projectPath)
+    )
   }
 }

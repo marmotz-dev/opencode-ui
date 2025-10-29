@@ -5,8 +5,9 @@ import {
   Config,
   Message,
   NotFoundError,
+  Project as OriginalProject,
   Part,
-  Project,
+  Path,
   Provider,
   Session,
 } from '@opencode-ai/sdk/client'
@@ -40,15 +41,20 @@ export type Model = {
   modelName: string
 }
 
+export type Project = OriginalProject & {
+  name: string
+}
+
 type OpencodeResponse<T, E> =
   | ({ data: T; error: undefined } & { request: Request; response: Response })
   | ({ data: undefined; error: E } & { request: Request; response: Response })
 
 export type GetAgentsResponse = OpencodeResponse<Agent[], unknown>
 export type GetConfigResponse = OpencodeResponse<Config, unknown>
-export type GetProvidersResponse = OpencodeResponse<ProviderData, unknown>
-export type GetProjectsResponse = OpencodeResponse<Project[], unknown>
 export type GetCurrentProjectResponse = OpencodeResponse<Project, unknown>
+export type GetPathResponse = OpencodeResponse<Path, unknown>
+export type GetProjectsResponse = OpencodeResponse<Project[], unknown>
+export type GetProvidersResponse = OpencodeResponse<ProviderData, unknown>
 
 export type CreateSessionResponse = OpencodeResponse<Session, BadRequestError>
 export type DeleteSessionResponse = OpencodeResponse<boolean, BadRequestError | NotFoundError>

@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing'
 import { Session } from '@opencode-ai/sdk/client'
-import { of } from 'rxjs'
 
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
@@ -18,14 +17,14 @@ describe('SessionsService', () => {
     title: 'Test Session',
     version: '1.0.0',
     time: {
-      created: Date.now(),
-      updated: Date.now(),
+      created: 1761770858288,
+      updated: 1761770858288,
     },
   }
 
   beforeEach(() => {
     mockOpencodeApiService = {
-      getSessions: jest.fn(),
+      getProjectSessions: jest.fn(),
       createSession: jest.fn(),
       deleteSession: jest.fn(),
       onEvent: jest.fn(),
@@ -65,8 +64,6 @@ describe('SessionsService', () => {
   })
 
   it('should return correct session when sessionId matches', () => {
-    mockOpencodeApiService.getSessions.mockReturnValue(of({ data: [mockSession] }))
-
     service.setSessionId('test-session-id')
 
     // Manually set sessions to test the computed property
@@ -140,12 +137,14 @@ describe('SessionsService', () => {
 
   it('should load sessions from API', async () => {
     const sessions = [mockSession]
-    mockOpencodeApiService.getSessions.mockResolvedValue({ data: sessions })
+    const mockProject = { id: 'test-project', worktree: '/test', time: { created: Date.now() } }
+    mockOpencodeApiService.getProjectSessions.mockResolvedValue({ data: sessions })
 
+    service.setCurrentProject(mockProject)
     await service.loadSessions()
 
     expect(service.sessions()).toEqual(sessions)
-    expect(mockOpencodeApiService.getSessions).toHaveBeenCalled()
+    expect(mockOpencodeApiService.getProjectSessions).toHaveBeenCalledWith(mockProject)
   })
 
   it('should handle session updated event', () => {

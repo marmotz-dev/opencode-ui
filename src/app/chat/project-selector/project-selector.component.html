@@ -1,0 +1,24 @@
+<app-selector
+  [visible]="visible()"
+  [items]="projectItemsOptions()"
+  header="Select Project"
+  placeholder="Search projects..."
+  (selected)="select($event)"
+  (visibleChange)="hide()"
+>
+  <ng-template
+    pTemplate="item"
+    let-item
+  >
+    <div class="flex items-center">
+      <div class="flex-1 font-bold">{{ item.data.name }}</div>
+      <div class="text-xs">{{ item.data.worktree }}</div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="actions">
+    <div class="flex items-center">
+      <p-button (onClick)="createProject()">New project</p-button>
+    </div>
+  </ng-template>
+</app-selector>

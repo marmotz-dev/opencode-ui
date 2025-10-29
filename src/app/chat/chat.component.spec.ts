@@ -3,9 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ActivatedRoute, Router } from '@angular/router'
 import { of } from 'rxjs'
 import { Logger } from '../shared/logger/logger.service'
-import { OpencodeChatService } from '../shared/opencode'
+import { OpencodeApiService, OpencodeChatService } from '../shared/opencode'
 import { ChatAreaComponent } from './chat-area/chat-area.component'
 import { ChatComponent } from './chat.component'
+
 import { MessageInputComponent } from './message-input/message-input.component'
 import { ModelSelectorComponent } from './model-selector/model-selector.component'
 import { SessionListComponent } from './session-list/session-list.component'
@@ -18,10 +19,16 @@ jest.mock('primeng/contextmenu', () => ({
 
 // Mock all child components to isolate ChatComponent
 @Component({
-  selector: 'app-session-list',
-  template: '<div class="mock-session-list"></div>',
+  selector: 'app-projects-list',
+  template: '<div class="mock-projects-list"></div>',
 })
-class MockSessionListComponent {
+class MockProjectsListComponent {}
+
+@Component({
+  selector: 'app-sessions-list',
+  template: '<div class="mock-sessions-list"></div>',
+})
+class MockSessionsListComponent {
   @Input() sessionId: any = null
 }
 
@@ -76,6 +83,7 @@ describe('ChatComponent', () => {
         sessions: signal([mockSession]),
         session: signal(mockSession),
         setSessionId: jest.fn(),
+        setCurrentProject: jest.fn(),
       },
       messages: {
         sessionMessages: signal([]),
@@ -83,6 +91,11 @@ describe('ChatComponent', () => {
       },
       providers: {
         modelSelectorVisible: signal(false),
+      },
+      projects: {
+        projects: signal([]),
+        projectSelectorVisible: signal(false),
+        currentProject: signal(mockSession),
       },
     }
 
@@ -101,7 +114,8 @@ describe('ChatComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         ChatComponent,
-        MockSessionListComponent,
+        MockProjectsListComponent,
+        MockSessionsListComponent,
         MockChatAreaComponent,
         MockMessageInputComponent,
         MockModelSelectorComponent,
@@ -112,6 +126,22 @@ describe('ChatComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: Logger, useValue: { debug: jest.fn() } },
+        {
+          provide: OpencodeApiService,
+          useValue: {
+            listenEvents: jest.fn(),
+            getProjects: jest.fn().mockResolvedValue({ data: [] }),
+            getCurrentProject: jest.fn().mockResolvedValue({ data: null }),
+            getSessions: jest.fn().mockResolvedValue({ data: [] }),
+            getSessionMessages: jest.fn().mockResolvedValue({ data: [] }),
+            getProviders: jest.fn().mockResolvedValue({ data: { providers: [] } }),
+            getAgents: jest.fn().mockResolvedValue({ data: [] }),
+            getConfig: jest.fn().mockResolvedValue({ data: {} }),
+            prompt: jest.fn().mockResolvedValue({ data: undefined }),
+            createSession: jest.fn().mockResolvedValue({ data: mockSession }),
+            deleteSession: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
@@ -127,7 +157,8 @@ describe('ChatComponent', () => {
         },
         add: {
           imports: [
-            MockSessionListComponent,
+            MockProjectsListComponent,
+            MockSessionsListComponent,
             MockChatAreaComponent,
             MockMessageInputComponent,
             MockModelSelectorComponent,
@@ -181,7 +212,6 @@ describe('ChatComponent', () => {
 
       // Verify the effect behavior
       expect(mockOpencodeChatService.sessions.setSessionId).toHaveBeenCalledWith('test-session-id')
-      expect(mockOpencodeChatService.messages.loadSessionMessages).toHaveBeenCalled()
     })
 
     it('should navigate to root when no session exists', async () => {

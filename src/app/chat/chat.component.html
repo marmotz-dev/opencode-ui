@@ -1,22 +1,25 @@
 <div class="flex h-screen w-full bg-slate-200">
-  <div class="h-full w-80">
-    <app-session-list />
-  </div>
-
-  <div class="my-1 mr-1 flex max-h-full flex-1 flex-col gap-y-1">
-    <div
-      #scrollContainer
-      class="flex h-full flex-1 flex-col overflow-y-auto rounded-2xl bg-white"
-    >
-      <app-chat-area />
+  @if (currentProject()) {
+    <div class="flex h-full w-80 flex-col">
+      <app-sessions-list />
     </div>
 
-    <div class="rounded-2xl bg-slate-100 p-4">
-      <app-message-input />
-    </div>
+    <div class="my-1 mr-1 flex max-h-full flex-1 flex-col gap-y-1">
+      <div
+        #scrollContainer
+        class="flex h-full flex-1 flex-col overflow-y-auto rounded-2xl bg-white"
+      >
+        <app-chat-area />
+      </div>
 
-    <app-status />
-  </div>
+      <div class="rounded-2xl bg-slate-100 p-4">
+        <app-message-input />
+      </div>
+
+      <app-status />
+    </div>
+  }
 </div>
 
+<app-project-selector [visible]="projectSelectorVisible()" />
 <app-model-selector [visible]="modelSelectorVisible()" />

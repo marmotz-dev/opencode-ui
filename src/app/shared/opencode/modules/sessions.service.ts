@@ -1,5 +1,5 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core'
-import { Event, EventSessionDeleted, EventSessionUpdated, Session } from '@opencode-ai/sdk/client'
+import { Event, EventSessionDeleted, EventSessionUpdated, Project, Session } from '@opencode-ai/sdk/client'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
 
@@ -15,6 +15,8 @@ export class SessionsService {
 
   private readonly _sessionId = signal<string | null>(null)
   public sessionId = this._sessionId.asReadonly()
+
+  private readonly currentProject = signal<Project | null>(null)
 
   readonly session = computed(() => {
     const sessionId = this.sessionId()
@@ -90,12 +92,15 @@ export class SessionsService {
   }
 
   async loadSessions() {
-    const response = await this.opencodeApi.getSessions()
-    const sessions = response.data ?? []
+    const currentProject = this.currentProject()
+    if (currentProject) {
+      const response = await this.opencodeApi.getProjectSessions(currentProject)
+      const sessions = response.data ?? []
 
-    this.logger.debug('loadSessions', sessions)
+      this.logger.debug('loadSessions', sessions)
 
-    this._sessions.set(sessions)
+      this._sessions.set(sessions)
+    }
   }
 
   private onSessionDeleted(event: EventSessionDeleted) {
@@ -132,5 +137,9 @@ export class SessionsService {
 
       return [...sessions]
     })
+  }
+
+  setCurrentProject(currentProject: Project | null) {
+    this.currentProject.set(currentProject)
   }
 }
