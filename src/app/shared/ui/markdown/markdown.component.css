@@ -1,4 +1,5 @@
-::ng-deep ul, ::ng-deep ol {
+::ng-deep ul,
+::ng-deep ol {
   padding-left: 1.5rem;
   line-height: 0;
 }
@@ -46,8 +47,8 @@
   margin-bottom: 0.25rem;
 }
 
-::ng-deep code[class*="language-"],
-::ng-deep pre[class*="language-"] {
+::ng-deep code[class*='language-'],
+::ng-deep pre[class*='language-'] {
   border-radius: 0.5rem;
   font-family: 'Source Code Pro', monospace;
   white-space: pre-wrap;

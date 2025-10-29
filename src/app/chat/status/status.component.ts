@@ -13,8 +13,9 @@ import { IconUi } from '../../shared/ui/icon/icon.ui'
 export class StatusComponent {
   private readonly opencodeChat = inject(OpencodeChatService)
 
+  protected currentProject = this.opencodeChat.projects.currentProject
   protected currentPath = computed(() => {
-    const currentProject = this.opencodeChat.projects.currentProject()
+    const currentProject = this.currentProject()
     if (!currentProject) {
       return null
     }
@@ -25,5 +26,9 @@ export class StatusComponent {
 
   openModelSelector() {
     this.opencodeChat.providers.openModelSelector()
+  }
+
+  openProjectSelector() {
+    this.opencodeChat.projects.openProjectSelector()
   }
 }

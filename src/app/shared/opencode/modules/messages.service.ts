@@ -30,7 +30,7 @@ export class MessagesService {
     const sessionsMessages = this.sessionsMessages()
     const sessionId = this.sessionsService.sessionId()
 
-    this.logger.debug('MessagesService.computed.sessionMessages', { sessionsMessages, sessionId })
+    this.logger.debug('computed.sessionMessages', { sessionsMessages, sessionId })
 
     if (sessionId) {
       return sessionsMessages[sessionId] ?? null
@@ -41,10 +41,10 @@ export class MessagesService {
 
   readonly currentModel = computed<Model | null>(() => {
     const nextPromptModel = this.providersService.nextPromptModel()
-    const lastChosenPromptModel = this.providersService['lastChosenPromptModel']()
+    const lastChosenPromptModel = this.providersService.lastChosenPromptModel()
     let messages = this.sessionMessages()
     const sessionsMessages = this.sessionsMessages()
-    const providers = this.providersService.providers()
+    this.providersService.providers()
 
     if (nextPromptModel) {
       return nextPromptModel
@@ -65,24 +65,33 @@ export class MessagesService {
       if (lastChosenPromptModel) {
         return this.providersService.getProviderByIds(lastChosenPromptModel.providerID, lastChosenPromptModel.modelID)
       }
+    } else {
+      const info = lastMessage.info as AssistantMessage
 
-      if (!providers) {
-        return null
+      const provider = this.providersService.getProviderByIds(info.providerID, info.modelID)
+      if (provider) {
+        return provider
       }
-
-      const providerData = Object.entries(providers?.default).shift()
-
-      if (!providerData) {
-        return null
-      }
-
-      return this.providersService.getProviderByIds(...providerData)
     }
 
-    const info = lastMessage.info as AssistantMessage
-
-    return this.providersService.getProviderByIds(info.providerID, info.modelID)
+    return this.getDefaultModel()
   })
+
+  getDefaultModel() {
+    const providers = this.providersService.providers()
+    if (!providers) {
+      return null
+    }
+
+    for (const providerId in providers.default) {
+      const provider = this.providersService.getProviderByIds(providerId, providers.default[providerId])
+      if (provider) {
+        return provider
+      }
+    }
+
+    return null
+  }
 
   constructor() {
     effect(() => this.loadSessionMessagesEffect())
@@ -118,7 +127,7 @@ export class MessagesService {
         [sessionId]: response.data ?? [],
       }))
 
-      this.logger.debug('MessagesService.loadSessionMessages', {
+      this.logger.debug('loadSessionMessages', {
         sessionId,
         sessionMessages: response.data ?? [],
       })
@@ -128,7 +137,7 @@ export class MessagesService {
   async prompt(message: string) {
     let sessionId = this.sessionsService.sessionId()
 
-    this.logger.debug('SessionsService.prompt', { message, sessionId })
+    this.logger.debug('prompt', { message, sessionId })
 
     if (!sessionId) {
       const session = await this.sessionsService.createSession()
@@ -139,13 +148,13 @@ export class MessagesService {
 
       sessionId = session.id
 
-      this.logger.debug('SessionsService.prompt.createSession', { message, sessionId })
+      this.logger.debug('prompt.createSession', { message, sessionId })
     }
 
     const model = this.currentModel()
 
     this.opencodeApi.prompt(sessionId, message, model).then((response) => {
-      this.logger.debug('SessionsService.prompt.response', { message, sessionId, response })
+      this.logger.debug('prompt.response', { message, sessionId, response })
     })
   }
 
@@ -159,7 +168,7 @@ export class MessagesService {
 
   private async loadSessionMessagesEffect() {
     const sessionId = this.sessionsService.sessionId()
-    this.logger.debug('MessagesService.effect.loadSessionMessages', sessionId)
+    this.logger.debug('effect.loadSessionMessages', sessionId)
 
     if (sessionId) {
       await this.loadSessionMessages()

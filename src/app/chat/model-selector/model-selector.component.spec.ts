@@ -1,11 +1,6 @@
 import { Component, Input, signal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { FormsModule } from '@angular/forms'
 import { provideNoopAnimations } from '@angular/platform-browser/animations'
-import { ButtonModule } from 'primeng/button'
-import { DialogModule } from 'primeng/dialog'
-import { InputText } from 'primeng/inputtext'
-import { ListboxModule } from 'primeng/listbox'
 
 import { ModelNameComponent } from '../../shared/components/model-name/model-name.component'
 import { Model, OpencodeChatService } from '../../shared/opencode'
@@ -69,15 +64,7 @@ describe('ModelSelectorComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      imports: [
-        ModelSelectorComponent,
-        DialogModule,
-        ListboxModule,
-        ButtonModule,
-        InputText,
-        FormsModule,
-        MockModelNameComponent,
-      ],
+      imports: [ModelSelectorComponent, MockModelNameComponent],
       providers: [{ provide: OpencodeChatService, useValue: mockOpencodeChatService }, provideNoopAnimations()],
     })
       .overrideComponent(ModelSelectorComponent, {
@@ -103,97 +90,27 @@ describe('ModelSelectorComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should initialize with empty search terms', () => {
-    expect(component.searchTerms()).toBe('')
-  })
-
   it('should compute provider models from providers', () => {
-    const providerModels = (component as any).providerModels()
+    const providerModels = (component as any).providerModelsOptions()
 
     expect(providerModels).toHaveLength(1)
-    expect(providerModels[0]).toEqual(mockModel)
+    expect(providerModels[0].data).toEqual(mockModel)
   })
 
   it('should return empty array when no providers', () => {
     mockOpencodeChatService.providers.providers.set(null)
     fixture.detectChanges()
 
-    const providerModels = (component as any).providerModels()
+    const providerModels = (component as any).providerModelsOptions()
 
     expect(providerModels).toEqual([])
   })
 
-  describe('filteredProviderModels', () => {
-    it('should return all models when search is empty', () => {
-      component.searchTerms.set('')
-      fixture.detectChanges()
-
-      const filteredModels = (component as any).filteredProviderModels()
-
-      expect(filteredModels).toHaveLength(1)
-      expect(filteredModels[0]).toEqual(mockModel)
-    })
-
-    it('should filter models by provider name', () => {
-      component.searchTerms.set('test')
-      fixture.detectChanges()
-
-      const filteredModels = (component as any).filteredProviderModels()
-
-      expect(filteredModels).toHaveLength(1)
-      expect(filteredModels[0]).toEqual(mockModel)
-    })
-
-    it('should filter models by model name', () => {
-      component.searchTerms.set('model')
-      fixture.detectChanges()
-
-      const filteredModels = (component as any).filteredProviderModels()
-
-      expect(filteredModels).toHaveLength(1)
-      expect(filteredModels[0]).toEqual(mockModel)
-    })
-
-    it('should return empty array when no match', () => {
-      component.searchTerms.set('nonexistent')
-      fixture.detectChanges()
-
-      const filteredModels = (component as any).filteredProviderModels()
-
-      expect(filteredModels).toHaveLength(0)
-    })
-
-    it('should handle multiple search words', () => {
-      component.searchTerms.set('test provider')
-      fixture.detectChanges()
-
-      const filteredModels = (component as any).filteredProviderModels()
-
-      expect(filteredModels).toHaveLength(1)
-      expect(filteredModels[0]).toEqual(mockModel)
-    })
-  })
-
   describe('select', () => {
-    it('should select model and hide selector', () => {
+    it('should select model', () => {
       component.select(mockModel)
 
       expect(mockOpencodeChatService.providers.setNextPromptModel).toHaveBeenCalledWith(mockModel)
-      expect(mockOpencodeChatService.providers.closeModelSelector).toHaveBeenCalled()
-    })
-  })
-
-  describe('visibleChanged', () => {
-    it('should hide selector when visible becomes false', () => {
-      component.visibleChanged(false)
-
-      expect(mockOpencodeChatService.providers.closeModelSelector).toHaveBeenCalled()
-    })
-
-    it('should not hide selector when visible becomes true', () => {
-      component.visibleChanged(true)
-
-      expect(mockOpencodeChatService.providers.closeModelSelector).not.toHaveBeenCalled()
     })
   })
 

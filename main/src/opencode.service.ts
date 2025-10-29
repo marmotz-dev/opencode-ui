@@ -1,5 +1,6 @@
 import { createOpencode, OpencodeClient } from '@opencode-ai/sdk'
 import { BrowserWindow } from 'electron'
+import { ProjectHydrator } from './hydrators/project.hydrator.js'
 import { Model } from './opencode.types.js'
 
 export class OpencodeService {
@@ -41,16 +42,24 @@ export class OpencodeService {
     return this.client.app.agents()
   }
 
-  getCurrentSessions() {
-    return this.client.session.list()
+  getProjectSessions(projectPath: string) {
+    return this.client.session.list({
+      query: {
+        directory: projectPath,
+      },
+    })
   }
 
-  getProjects() {
-    return this.client.project.list()
+  async getProjects() {
+    return ProjectHydrator.hydrateProjectsResponse(await this.client.project.list())
   }
 
-  getCurrentProject() {
-    return this.client.project.current()
+  async getCurrentProject() {
+    return { data: null }
+  }
+
+  getPath() {
+    return this.client.path.get()
   }
 
   getProviders() {

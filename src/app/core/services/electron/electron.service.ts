@@ -57,4 +57,8 @@ export class ElectronService {
   get isElectron(): boolean {
     return !!window?.process?.type
   }
+
+  async selectDirectory(): Promise<string | null> {
+    return this.ipcRenderer.invoke('select-directory')
+  }
 }

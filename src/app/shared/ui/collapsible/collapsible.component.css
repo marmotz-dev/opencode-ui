@@ -5,7 +5,11 @@
 .collapsible {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 300ms ease-out, opacity 300ms ease-out, margin-top 300ms ease-out, opacity 300ms ease-out;
+  transition:
+    grid-template-rows 300ms ease-out,
+    opacity 300ms ease-out,
+    margin-top 300ms ease-out,
+    opacity 300ms ease-out;
   overflow: hidden;
 }
 

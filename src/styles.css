@@ -24,7 +24,8 @@
     U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -35,7 +36,7 @@ body {
 @utility touch-hitbox {
   position: relative;
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     display: block;
     top: 50%;
@@ -45,6 +46,6 @@ body {
     height: 100%;
     min-height: 44px;
     min-width: 44px;
-    z-index: 9999;
+    /*z-index: 9999;*/
   }
 }

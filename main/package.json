@@ -9,7 +9,7 @@
     "email": "contact@marmotz.dev"
   },
   "dependencies": {
-    "@opencode-ai/sdk": "^0.15.20"
+    "@opencode-ai/sdk": "^0.15.28"
   },
   "scripts": {
     "update:minor": "bunx npm-check-updates -i -t minor",
