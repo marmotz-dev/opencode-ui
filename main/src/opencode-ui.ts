@@ -72,12 +72,7 @@ export class OpencodeUi {
       const __dirname = dirname(fileURLToPath(import.meta.url))
 
       // Path when running electron executable
-      let pathIndex = './index.html'
-
-      if (existsSync(join(__dirname, '../dist/index.html'))) {
-        // Path when running electron in local folder
-        pathIndex = '../dist/index.html'
-      }
+      let pathIndex = '../../dist/index.html'
 
       const fullPath = join(__dirname, pathIndex)
       const url = `file://${resolve(fullPath).replace(/\\/g, '/')}`

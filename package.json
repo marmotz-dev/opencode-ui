@@ -36,6 +36,7 @@
     "electron:build:win": "bun run build:prod && electron-builder build --publish=never --win",
     "electron:build:mac": "bun run build:prod && electron-builder build --publish=never --mac",
     "electron:build:linux": "bun run build:prod && electron-builder build --publish=never --linux",
+    "electron:build:linux:app-image": "bun run build:prod && electron-builder build --publish=never --linux=AppImage",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
     "lint": "prettier --check .",
