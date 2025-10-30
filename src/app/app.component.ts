@@ -4,7 +4,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 import { faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '../environments/environment'
-import { ElectronService } from './core/services'
+import { ElectronService, KeyboardShortcutService } from './core/services'
 import { Logger } from './shared/logger/logger.service'
 
 @Component({
@@ -17,6 +17,7 @@ export class AppComponent {
 
   private electronService = inject(ElectronService)
   private translate = inject(TranslateService)
+  private keyboardShortcutService = inject(KeyboardShortcutService)
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[])
