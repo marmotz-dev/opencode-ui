@@ -37,7 +37,15 @@ export class ModelSelectorComponent {
       }
     }
 
-    return providerModels
+    return providerModels.sort((a, b) => {
+      // First sort by provider name
+      const providerCompare = a.data.providerName.localeCompare(b.data.providerName)
+      if (providerCompare !== 0) {
+        return providerCompare
+      }
+      // Then sort by model name within the same provider
+      return a.data.modelName.localeCompare(b.data.modelName)
+    })
   })
 
   select(model: Model) {
