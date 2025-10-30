@@ -128,7 +128,7 @@ jobs:
 
   aur-release:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-#    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') || github.event_name == 'pull_request' # for tests in PR
+    #    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') || github.event_name == 'pull_request' # for tests in PR
     needs: build
     runs-on: ubuntu-latest
     container:
