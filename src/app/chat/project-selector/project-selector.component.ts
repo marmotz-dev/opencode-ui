@@ -23,11 +23,13 @@ export class ProjectSelectorComponent {
       return []
     }
 
-    return projects.map((project) => ({
-      id: project.id,
-      label: project.name,
-      data: project,
-    })) satisfies SelectorItem<Project>[]
+    return projects
+      .map((project) => ({
+        id: project.id,
+        label: project.name,
+        data: project,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label)) satisfies SelectorItem<Project>[]
   })
 
   select(project: Project) {
