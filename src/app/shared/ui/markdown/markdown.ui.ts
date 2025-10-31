@@ -10,7 +10,7 @@ import { MarkdownComponent } from 'ngx-markdown'
       class="flex flex-col whitespace-pre-line"
     />
   `,
-  styleUrls: ['./markdown.component.css'],
+  styleUrls: ['./markdown.ui.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkdownUi {

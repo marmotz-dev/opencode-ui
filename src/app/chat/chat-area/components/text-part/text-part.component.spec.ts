@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { TextPart } from '@opencode-ai/sdk/client'
 import { MarkdownModule } from 'ngx-markdown'
 
-import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
+import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
 import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 import { TextPartComponent } from './text-part.component'
 

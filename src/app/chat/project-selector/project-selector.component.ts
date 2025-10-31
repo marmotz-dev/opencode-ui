@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core'
 import { PrimeTemplate } from 'primeng/api'
 import { Button } from 'primeng/button'
-import { ElectronService } from '../../core/services'
-import { SelectorComponent, SelectorItem } from '../../shared/components/selector/selector.component'
+import { ElectronService } from '../../shared'
+import { SelectorComponent, SelectorItem } from '../../shared/ui/selector/selector.ui'
 import { OpencodeChatService, Project } from '../../shared/opencode'
 
 @Component({

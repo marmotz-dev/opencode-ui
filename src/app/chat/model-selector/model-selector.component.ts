@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core'
 import { PrimeTemplate } from 'primeng/api'
-import { ModelNameComponent } from '../../shared/components/model-name/model-name.component'
-import { SelectorComponent, SelectorItem } from '../../shared/components/selector/selector.component'
+import { ModelNameComponent } from '../model-name/model-name.component'
+import { SelectorComponent, SelectorItem } from '../../shared/ui/selector/selector.ui'
 import { Model, OpencodeChatService } from '../../shared/opencode'
 
 @Component({

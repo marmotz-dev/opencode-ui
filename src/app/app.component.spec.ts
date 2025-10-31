@@ -2,7 +2,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing'
 import { provideRouter } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { AppComponent } from './app.component'
-import { ElectronService } from './core/services'
+import { ElectronService } from './shared'
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {

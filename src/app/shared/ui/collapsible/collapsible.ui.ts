@@ -5,8 +5,8 @@ import { IconUi } from '../icon/icon.ui'
 @Component({
   selector: 'app-ui-collapsible',
   imports: [IconUi, ClassNames],
-  templateUrl: './collapsible.component.html',
-  styleUrl: './collapsible.component.css',
+  templateUrl: './collapsible.ui.html',
+  styleUrl: './collapsible.ui.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollapsibleUi {

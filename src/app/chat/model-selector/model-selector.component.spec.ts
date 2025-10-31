@@ -2,7 +2,7 @@ import { Component, Input, signal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideNoopAnimations } from '@angular/platform-browser/animations'
 
-import { ModelNameComponent } from '../../shared/components/model-name/model-name.component'
+import { ModelNameComponent } from '../model-name/model-name.component'
 import { Model, OpencodeChatService } from '../../shared/opencode'
 import { ModelSelectorComponent } from './model-selector.component'
 

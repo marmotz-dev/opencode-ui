@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button'
 import { DialogModule } from 'primeng/dialog'
 import { InputText } from 'primeng/inputtext'
 import { ListboxModule } from 'primeng/listbox'
-import { SelectorComponent } from './selector.component'
+import { SelectorComponent } from './selector.ui'
 
 describe('SelectorComponent', () => {
   let component: SelectorComponent<any>

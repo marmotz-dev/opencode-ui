@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { MarkdownModule } from 'ngx-markdown'
 
-import { MarkdownUi } from './markdown.component'
+import { MarkdownUi } from './markdown.ui'
 
 describe('MarkdownUi', () => {
   let component: MarkdownUi

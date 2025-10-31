@@ -5,7 +5,7 @@ import { Button } from 'primeng/button'
 import { OpencodeChatService } from '../../shared/opencode'
 
 import { IconUi } from '../../shared/ui/icon/icon.ui'
-import { TextareaUi } from '../../shared/ui/textarea/textarea.component'
+import { TextareaUi } from '../../shared/ui/textarea/textarea.ui'
 
 @Component({
   selector: 'app-message-input',

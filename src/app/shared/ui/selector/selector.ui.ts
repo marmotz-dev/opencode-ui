@@ -26,9 +26,9 @@ export type SelectorItem<T = any> = {
 }
 
 @Component({
-  selector: 'app-selector',
+  selector: 'app-ui-selector',
   imports: [CommonModule, DialogModule, ListboxModule, ButtonModule, InputText, FormsModule],
-  templateUrl: './selector.component.html',
+  templateUrl: './selector.ui.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(keydown)': 'onKeyDown($event)',

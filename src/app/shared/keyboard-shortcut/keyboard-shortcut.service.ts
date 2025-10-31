@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core'
 import { Router } from '@angular/router'
-import { OpencodeChatService } from '../../../shared/opencode'
+import { OpencodeChatService } from '../opencode'
 import { KeyboardKeys, KeyboardShortcut, KeyboardShortcutConfig } from './keyboard-shortcut.types'
 
 @Injectable({

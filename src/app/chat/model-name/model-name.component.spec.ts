@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { Model } from '../../opencode'
+import { Model } from '../../shared/opencode'
 
 import { ModelNameComponent } from './model-name.component'
 
