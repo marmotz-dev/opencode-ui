@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { OpencodeChatService } from '../../../shared/opencode'
-import { KeyboardShortcut, KeyboardShortcutConfig } from './keyboard-shortcut.types'
+import { KeyboardKeys, KeyboardShortcut, KeyboardShortcutConfig } from './keyboard-shortcut.types'
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class KeyboardShortcutService {
   // Detect if we're on macOS to use Cmd instead of Ctrl
   private readonly isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
 
-  constructor() {
+  init() {
     this.registerDefaultShortcuts()
     this.startListening()
   }
@@ -72,22 +72,7 @@ export class KeyboardShortcutService {
     this.shortcuts[key] = shortcut
   }
 
-  unregisterShortcut(shortcut: KeyboardShortcut) {
-    const key = this.generateShortcutKey(shortcut)
-    delete this.shortcuts[key]
-  }
-
-  private generateShortcutKey(shortcut: KeyboardShortcut): string
-  private generateShortcutKey(event: {
-    key: string
-    ctrl?: boolean
-    shift?: boolean
-    alt?: boolean
-    meta?: boolean
-  }): string
-  private generateShortcutKey(
-    input: KeyboardShortcut | { key: string; ctrl?: boolean; shift?: boolean; alt?: boolean; meta?: boolean }
-  ): string {
+  private generateShortcutKey(input: KeyboardKeys): string {
     const modifiers = [
       (input as any).ctrl ? 'ctrl' : '',
       (input as any).shift ? 'shift' : '',
@@ -99,17 +84,12 @@ export class KeyboardShortcutService {
   }
 
   private startListening() {
-    if (this.isListening) return
+    if (this.isListening) {
+      return
+    }
 
     document.addEventListener('keydown', this.handleKeyDown.bind(this))
     this.isListening = true
-  }
-
-  stopListening() {
-    if (!this.isListening) return
-
-    document.removeEventListener('keydown', this.handleKeyDown.bind(this))
-    this.isListening = false
   }
 
   private handleKeyDown(event: KeyboardEvent) {
@@ -118,23 +98,6 @@ export class KeyboardShortcutService {
     const target = event.target as HTMLElement
     const isInInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.contentEditable === 'true'
 
-    // If we're in an input field, only allow our registered shortcuts
-    if (isInInput) {
-      const shortcutKey = this.generateShortcutKey({
-        key: event.key,
-        ctrl: event.ctrlKey,
-        shift: event.shiftKey,
-        alt: event.altKey,
-        meta: event.metaKey,
-      })
-
-      const shortcut = this.shortcuts[shortcutKey]
-      if (!shortcut) {
-        // Not one of our shortcuts, let the input field handle it normally
-        return
-      }
-    }
-
     const shortcutKey = this.generateShortcutKey({
       key: event.key,
       ctrl: event.ctrlKey,
@@ -142,8 +105,13 @@ export class KeyboardShortcutService {
       alt: event.altKey,
       meta: event.metaKey,
     })
-
     const shortcut = this.shortcuts[shortcutKey]
+
+    // If we're in an input field, only allow our registered shortcuts
+    if (isInInput && !shortcut) {
+      return
+    }
+
     if (shortcut) {
       if (shortcut.preventDefault !== false) {
         event.preventDefault()
@@ -153,33 +121,19 @@ export class KeyboardShortcutService {
   }
 
   private async navigateToNextSession() {
-    const sessions = this.opencodeChat.sessions.sessions()
-    const currentSessionId = this.opencodeChat.sessions.sessionId()
+    const nextSession = this.opencodeChat.sessions.getNextSession()
 
-    if (!sessions || !currentSessionId) return
-
-    const currentIndex = sessions.findIndex((s) => s.id === currentSessionId)
-    if (currentIndex === -1) return
-
-    const nextIndex = (currentIndex + 1) % sessions.length
-    const nextSession = sessions[nextIndex]
-
-    await this.router.navigate(['chat', nextSession.id])
+    if (nextSession) {
+      await this.router.navigate(['chat', nextSession.id])
+    }
   }
 
   private async navigateToPreviousSession() {
-    const sessions = this.opencodeChat.sessions.sessions()
-    const currentSessionId = this.opencodeChat.sessions.sessionId()
+    const prevSession = this.opencodeChat.sessions.getPeviousSession()
 
-    if (!sessions || !currentSessionId) return
-
-    const currentIndex = sessions.findIndex((s) => s.id === currentSessionId)
-    if (currentIndex === -1) return
-
-    const prevIndex = currentIndex === 0 ? sessions.length - 1 : currentIndex - 1
-    const prevSession = sessions[prevIndex]
-
-    await this.router.navigate(['chat', prevSession.id])
+    if (prevSession) {
+      await this.router.navigate(['chat', prevSession.id])
+    }
   }
 
   private showModelSelector() {
@@ -198,9 +152,5 @@ export class KeyboardShortcutService {
       // Move cursor to end
       textarea.setSelectionRange(textarea.value.length, textarea.value.length)
     }
-  }
-
-  getShortcuts(): KeyboardShortcutConfig {
-    return { ...this.shortcuts }
   }
 }

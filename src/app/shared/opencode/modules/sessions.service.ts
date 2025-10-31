@@ -142,4 +142,40 @@ export class SessionsService {
   setCurrentProject(currentProject: Project | null) {
     this.currentProject.set(currentProject)
   }
+
+  getNextSession() {
+    const sessions = this.sessions()
+    const currentSessionId = this.sessionId()
+
+    if (!sessions || !currentSessionId) {
+      return
+    }
+
+    const currentIndex = sessions.findIndex((s) => s.id === currentSessionId)
+    if (currentIndex === -1) {
+      return
+    }
+
+    const nextIndex = (currentIndex + 1) % sessions.length
+
+    return sessions[nextIndex]
+  }
+
+  getPeviousSession() {
+    const sessions = this.sessions()
+    const currentSessionId = this.sessionId()
+
+    if (!sessions || !currentSessionId) {
+      return
+    }
+
+    const currentIndex = sessions.findIndex((s) => s.id === currentSessionId)
+    if (currentIndex === -1) {
+      return
+    }
+
+    const prevIndex = currentIndex === 0 ? sessions.length - 1 : currentIndex - 1
+
+    return sessions[prevIndex]
+  }
 }
