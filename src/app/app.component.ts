@@ -23,6 +23,8 @@ export class AppComponent {
   constructor(...args: unknown[])
 
   constructor(library: FaIconLibrary) {
+    this.keyboardShortcutService.init()
+
     library.addIcons(faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash)
 
     const electronService = this.electronService
