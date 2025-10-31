@@ -4,7 +4,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 import { faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '../environments/environment'
-import { ElectronService, KeyboardShortcutService } from './core/services'
+import { ElectronService, KeyboardShortcutService } from './shared'
 import { Logger } from './shared/logger/logger.service'
 
 @Component({

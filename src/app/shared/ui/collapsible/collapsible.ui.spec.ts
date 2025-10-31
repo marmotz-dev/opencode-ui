@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 
 import { IconUi } from '../icon/icon.ui'
-import { CollapsibleUi } from './collapsible.component'
+import { CollapsibleUi } from './collapsible.ui'
 
 describe('CollapsibleUi', () => {
   let component: CollapsibleUi

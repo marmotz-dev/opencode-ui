@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 import { Message, ReasoningPart } from '@opencode-ai/sdk/client'
-import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.component'
-import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
+import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.ui'
+import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
 import { PartTimeDurationPipe } from '../../pipes/part-time-duration.pipe'
 import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 
