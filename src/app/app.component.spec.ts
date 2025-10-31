@@ -6,10 +6,27 @@ import { ElectronService } from './core/services'
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
+    const mockElectronService = {
+      ipcRenderer: {
+        on: jest.fn(),
+        invoke: jest.fn().mockResolvedValue({ data: null }),
+        send: jest.fn(),
+        removeListener: jest.fn(),
+      },
+      webFrame: {},
+      childProcess: {},
+      fs: {},
+      isElectron: false,
+      selectDirectory: jest.fn(),
+    } as any
+
     void TestBed.configureTestingModule({
       declarations: [],
       imports: [AppComponent, TranslateModule.forRoot()],
-      providers: [provideRouter([]), ElectronService],
+      providers: [
+        provideRouter([]),
+        { provide: ElectronService, useValue: mockElectronService },
+      ],
     }).compileComponents()
   }))
 
