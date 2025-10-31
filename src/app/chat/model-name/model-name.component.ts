@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core'
-import { Model } from '../../opencode'
+import { Model } from '../../shared/opencode'
 
 @Component({
   selector: 'app-model-name',

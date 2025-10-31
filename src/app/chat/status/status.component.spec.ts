@@ -2,7 +2,7 @@ import { Component, Input, signal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ButtonModule } from 'primeng/button'
 
-import { ModelNameComponent } from '../../shared/components/model-name/model-name.component'
+import { ModelNameComponent } from '../model-name/model-name.component'
 import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 import { StatusComponent } from './status.component'
