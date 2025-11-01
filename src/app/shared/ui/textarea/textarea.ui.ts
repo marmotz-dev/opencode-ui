@@ -15,8 +15,8 @@ import { TextareaModule } from 'primeng/textarea'
 @Component({
   selector: 'app-ui-textarea',
   imports: [TextareaModule, ClassNames],
-  templateUrl: './textarea.component.html',
-  styleUrl: './textarea.component.css',
+  templateUrl: './textarea.ui.html',
+  styleUrl: './textarea.ui.css',
   host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

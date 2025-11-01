@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { Event, Project } from '@opencode-ai/sdk/client'
-import { ElectronService } from '../../core/services'
+import { ElectronService } from '..'
 import { Logger } from '../logger/logger.service'
 import {
   CreateSessionResponse,

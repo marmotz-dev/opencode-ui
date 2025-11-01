@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 import { Message, TextPart } from '@opencode-ai/sdk/client'
 import { ClassNames } from 'primeng/classnames'
-import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
+import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
 import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 
 @Component({

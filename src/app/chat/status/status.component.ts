@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core'
 import { ButtonModule } from 'primeng/button'
-import { ModelNameComponent } from '../../shared/components/model-name/model-name.component'
+import { ModelNameComponent } from '../model-name/model-name.component'
 import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 

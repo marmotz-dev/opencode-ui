@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { TextareaModule } from 'primeng/textarea'
 
-import { TextareaUi } from './textarea.component'
+import { TextareaUi } from './textarea.ui'
 
 describe('TextareaUi', () => {
   let component: TextareaUi

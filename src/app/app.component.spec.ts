@@ -2,14 +2,31 @@ import { TestBed, waitForAsync } from '@angular/core/testing'
 import { provideRouter } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { AppComponent } from './app.component'
-import { ElectronService } from './core/services'
+import { ElectronService } from './shared'
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
+    const mockElectronService = {
+      ipcRenderer: {
+        on: jest.fn(),
+        invoke: jest.fn().mockResolvedValue({ data: null }),
+        send: jest.fn(),
+        removeListener: jest.fn(),
+      },
+      webFrame: {},
+      childProcess: {},
+      fs: {},
+      isElectron: false,
+      selectDirectory: jest.fn(),
+    } as any
+
     void TestBed.configureTestingModule({
       declarations: [],
       imports: [AppComponent, TranslateModule.forRoot()],
-      providers: [provideRouter([]), ElectronService],
+      providers: [
+        provideRouter([]),
+        { provide: ElectronService, useValue: mockElectronService },
+      ],
     }).compileComponents()
   }))
 

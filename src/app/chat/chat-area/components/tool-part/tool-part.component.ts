@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { Message, ToolPart } from '@opencode-ai/sdk/client'
 import { createPatch } from 'diff'
 import stripAnsi from 'strip-ansi'
-import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.component'
-import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.component'
+import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.ui'
+import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
 import { PartTimeDurationPipe } from '../../pipes/part-time-duration.pipe'
 import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
 

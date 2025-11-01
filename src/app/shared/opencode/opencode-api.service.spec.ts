@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing'
-import { ElectronService } from '../../core/services'
+import { ElectronService } from '..'
 import { Logger } from '../logger/logger.service'
 import { OpencodeApiService } from './opencode-api.service'
 
