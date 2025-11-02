@@ -7,6 +7,7 @@ module.exports = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
+        tsconfig: './tsconfig.spec.json',
         allowSyntheticDefaultImports: true,
       },
     ],
