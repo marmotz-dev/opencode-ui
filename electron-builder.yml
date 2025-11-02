@@ -1,0 +1,53 @@
+appId: dev.marmotz.opencode-ui
+productName: opencode-ui
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - resources/**
+win:
+  executableName: ${productName}
+  icon: dist/assets/icons/opencode-ui.png
+  target: ["nsis"]
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+  notarize: false
+dmg:
+  icon: dist/assets/icons/opencode-ui.png
+  target: ["dmg"]
+  artifactName: ${name}-${version}.${ext}
+linux:
+  icon: dist/assets/icons/opencode-ui.png
+  target:
+    - AppImage
+    - snap
+    - deb
+    - rpm
+  maintainer: marmotz.dev
+  category: "Development;IDE;"
+  desktop:
+    entry:
+      Name: "OpenCode UI"
+      Comment: "OpenCode Desktop Client - AI coding agent"
+      Keywords: "ai;coding;agent;development;"
+      StartupWMClass: "opencode-ui"
+      StartupNotify: true
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+#publish:
+#  provider: generic
+#  url: https://example.com/auto-updates

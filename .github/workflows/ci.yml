@@ -61,7 +61,6 @@ jobs:
           elif [ "${{ matrix.os }}" == "macos-latest" ]; then
             bunx electron-builder build --publish=never --mac
           fi
-
       - name: Upload Linux files
         uses: actions/upload-artifact@v4
         with:
@@ -139,7 +138,6 @@ jobs:
           pacman -Syu --noconfirm base-devel git openssh
           useradd -m builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
       - name: Setup SSH for AUR
         run: |
           mkdir -p /home/builder/.ssh
@@ -148,7 +146,6 @@ jobs:
           ssh-keyscan aur.archlinux.org >> /home/builder/.ssh/known_hosts
           chown -R builder:builder /home/builder/.ssh
           sudo -u builder git config --global core.sshCommand "ssh -i /home/builder/.ssh/aur_key -o StrictHostKeyChecking=no"
-
       - name: Checkout AUR repo
         run: |
           mkdir aur
@@ -157,7 +154,6 @@ jobs:
           sudo -u builder git clone ssh://aur@aur.archlinux.org/opencode-ui-bin.git aur || (echo "Clone failed, listing directory:" && ls -la && exit 1)
           sudo -u builder git -C aur config user.email "contact@marmotz.dev"
           sudo -u builder git -C aur config user.name "Marmotz"
-
       - name: Get version from tag
         id: version
         run: |
@@ -166,7 +162,6 @@ jobs:
           else
             echo "version=0.0.0.pr${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           fi
-
       - name: Download Linux files
         uses: actions/download-artifact@v4
         with:
@@ -179,17 +174,14 @@ jobs:
           cd artifacts/linux
           SHA=$(sha256sum opencode-ui-*.AppImage | cut -d' ' -f1)
           echo "sha256=$SHA" >> $GITHUB_OUTPUT
-
       - name: Update PKGBUILD
         run: |
           sudo -u builder sed -i "s|pkgver=.*|pkgver=${{ steps.version.outputs.version }}|" aur/PKGBUILD
           sudo -u builder sed -i "/sha256sums=/,/^)/c\\sha256sums=(\n  '${{ steps.sha256.outputs.sha256 }}'\n)" aur/PKGBUILD
           sudo -u builder sed -i "s/pkgrel=.*/pkgrel=1/" aur/PKGBUILD
-
       - name: Generate .SRCINFO
         run: |
           sudo -u builder bash -c "cd aur && makepkg --printsrcinfo" > aur/.SRCINFO
-
       - name: Commit and push to AUR
         run: |
           sudo -u builder git -C aur add PKGBUILD .SRCINFO

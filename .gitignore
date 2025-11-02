@@ -1,13 +1,7 @@
-# compiled output
+/node_modules
+/build
 /dist
-/release
-main.js
-src/**/*.js
-*.js.map
-
-# dependencies
-node_modules
-
-# misc
-/.angular
-.env
+/out
+.DS_Store
+.eslintcache
+*.log*
