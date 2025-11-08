@@ -7,7 +7,6 @@ export default {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        tsconfig: './tsconfig.spec.json',
         allowSyntheticDefaultImports: true,
       },
     ],

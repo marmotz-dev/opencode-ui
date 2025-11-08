@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "schematicCollections": ["@angular-eslint/schematics"],
     "analytics": false
   },
   "version": 1,
@@ -27,23 +26,11 @@
             "tsConfig": "tsconfig.spec.json",
             "globalMocks": ["styleTransform", "matchMedia", "getComputedStyle"]
           }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
-          }
         }
       }
     }
   },
   "schematics": {
-    "@angular-eslint/schematics:application": {
-      "setParserOptionsProject": true
-    },
-    "@angular-eslint/schematics:library": {
-      "setParserOptionsProject": true
-    },
     "@schematics/angular:component": {
       "type": "component"
     },

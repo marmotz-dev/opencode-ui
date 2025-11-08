@@ -18,19 +18,25 @@
   "main": "./out/main/index.js",
   "scripts": {
     "format": "prettier --write .",
-    "lint": "eslint --cache .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "bun run typecheck:node && bun run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "bun run typecheck && electron-vite build",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "run-p postinstall:*",
+    "postinstall:electron": "electron-builder install-app-deps",
+    "postinstall:fonts": "bun -e \"import {$} from 'bun'; await $`cp ./node_modules/@fontsource-variable/*/files/*-latin-wght-normal.woff2 src/assets/fonts/`; // 1256\"",
     "build:unpack": "bun run build && electron-builder --dir",
     "build:win": "bun run build && electron-builder --win",
     "build:mac": "bun run build && electron-builder --mac",
     "build:linux": "bun run build && electron-builder --linux",
-    "test": "ng test"
+    "test": "ng test",
+    "update:minor": "bunx npm-check-updates -i -t minor",
+    "update:latest": "bunx npm-check-updates -i -t latest",
+    "bump:patch": "bunx bumpp --release patch package.json main/package.json",
+    "bump:minor": "bunx bumpp --release minor package.json main/package.json",
+    "bump:major": "bunx bumpp --release major package.json main/package.json"
   },
   "dependencies": {
     "@analogjs/vite-plugin-angular": "2.0.3",
@@ -60,12 +66,11 @@
     "primeng": "^20.3.0",
     "prismjs": "^1.30.0",
     "strip-ansi": "^7.1.2",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "tailwindcss-primeui": "^0.6.1"
   },
   "devDependencies": {
     "@angular-builders/jest": "^20.0.0",
-    "@electron-toolkit/eslint-config-prettier": "^3.0.0",
-    "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.18.6",
@@ -73,8 +78,8 @@
     "electron": "^38.1.2",
     "electron-builder": "^26.0.12",
     "electron-vite": "^4.0.1",
-    "eslint": "^9.39.1",
     "jest": "^30.2.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-tailwindcss": "^0.7.1",
