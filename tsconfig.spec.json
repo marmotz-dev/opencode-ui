@@ -2,13 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "outDir": "../out-tsc/spec",
+    "outDir": "./out-tsc/spec",
     "types": ["jest", "node"],
-    "moduleResolution": "nodenext",
+    "moduleResolution": "bundler",
     "paths": {
-      "@opencode-ai/sdk": ["../node_modules/@opencode-ai/sdk/dist/index.d.ts"],
-      "@opencode-ai/sdk/client": ["../node_modules/@opencode-ai/sdk/dist/client.d.ts"],
-      "@opencode-ai/sdk/server": ["../node_modules/@opencode-ai/sdk/dist/server.d.ts"]
+      "@opencode-ai/sdk": ["./node_modules/@opencode-ai/sdk/dist/index.d.ts"],
+      "@opencode-ai/sdk/client": ["./node_modules/@opencode-ai/sdk/dist/client.d.ts"],
+      "@opencode-ai/sdk/server": ["./node_modules/@opencode-ai/sdk/dist/server.d.ts"]
     }
   },
   "include": ["**/*.spec.ts", "**/*.d.ts"],

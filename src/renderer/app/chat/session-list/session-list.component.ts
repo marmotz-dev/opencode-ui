@@ -32,6 +32,7 @@ export class SessionListComponent {
   private readonly opencodeChat = inject(OpencodeChatService)
   sessionId = this.opencodeChat.sessions.sessionId
   sessions = this.opencodeChat.sessions.sessions
+  isProduction = (window as any).environment?.env === 'production'
 
   async createNewSession() {
     const newSession = await this.opencodeChat.sessions.createSession()

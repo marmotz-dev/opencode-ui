@@ -1,5 +1,6 @@
 import { signal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ElectronService } from '../../shared'
 import { OpencodeChatService } from '../../shared/opencode'
 import { ProjectSelectorComponent } from './project-selector.component'
 
@@ -7,6 +8,7 @@ describe('ProjectSelectorComponent', () => {
   let component: ProjectSelectorComponent
   let fixture: ComponentFixture<ProjectSelectorComponent>
   let mockOpencodeChatService: any
+  let mockElectronService: any
 
   const mockProjects = [
     { id: '1', worktree: '/path/to/project1', name: 'project1', time: { created: Date.now() } },
@@ -14,6 +16,10 @@ describe('ProjectSelectorComponent', () => {
   ]
 
   beforeEach(async () => {
+    mockElectronService = {
+      selectDirectory: jest.fn(),
+    }
+
     mockOpencodeChatService = {
       projects: {
         projects: signal(mockProjects),
@@ -25,7 +31,10 @@ describe('ProjectSelectorComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ProjectSelectorComponent],
-      providers: [{ provide: OpencodeChatService, useValue: mockOpencodeChatService }],
+      providers: [
+        { provide: OpencodeChatService, useValue: mockOpencodeChatService },
+        { provide: ElectronService, useValue: mockElectronService },
+      ],
     }).compileComponents()
 
     fixture = TestBed.createComponent(ProjectSelectorComponent)

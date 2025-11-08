@@ -1,6 +1,6 @@
 const esModules = ''
 
-module.exports = {
+export default {
   rootDir: './src',
   transformIgnorePatterns: [`<rootDir>/node_modules/(?!${esModules})`],
   transform: {

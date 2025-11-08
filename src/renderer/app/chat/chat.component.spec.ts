@@ -2,6 +2,7 @@ import { Component, Input, NO_ERRORS_SCHEMA, Signal, signal } from '@angular/cor
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ActivatedRoute, Router } from '@angular/router'
 import { of } from 'rxjs'
+import { ElectronService } from '../shared'
 import { Logger } from '../shared/logger/logger.service'
 import { OpencodeApiService, OpencodeChatService } from '../shared/opencode'
 import { ChatAreaComponent } from './chat-area/chat-area.component'
@@ -45,6 +46,14 @@ class MockChatAreaComponent {}
 class MockMessageInputComponent {}
 
 @Component({
+  selector: 'app-project-selector',
+  template: '<div class="mock-project-selector"></div>',
+})
+class MockProjectSelectorComponent {
+  @Input() visible: boolean = false
+}
+
+@Component({
   selector: 'app-model-selector',
   template: '<div class="mock-model-selector"></div>',
 })
@@ -78,6 +87,15 @@ describe('ChatComponent', () => {
   }
 
   beforeEach(async () => {
+    // Mock window.electron for ElectronService
+    Object.defineProperty(window, 'electron', {
+      value: {
+        ipcRenderer: { invoke: jest.fn() },
+        webFrame: {},
+      },
+      writable: true,
+    })
+
     mockOpencodeChatService = {
       sessions: {
         sessions: signal([mockSession]),
@@ -126,6 +144,12 @@ describe('ChatComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: Logger, useValue: { debug: jest.fn() } },
+        {
+          provide: ElectronService,
+          useValue: {
+            selectDirectory: jest.fn().mockResolvedValue('/test'),
+          },
+        },
         {
           provide: OpencodeApiService,
           useValue: {
