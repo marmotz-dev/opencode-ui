@@ -27,15 +27,14 @@ mac:
   notarize: false
 dmg:
   icon: dist/assets/icons/opencode-ui.png
-  target: ["dmg"]
   artifactName: ${name}-${version}.${ext}
 linux:
   icon: dist/assets/icons/opencode-ui.png
   target:
     - AppImage
     - snap
-    - deb
-    - rpm
+#    - deb
+#    - rpm
   maintainer: marmotz.dev
   category: "Development;IDE;"
   desktop:
