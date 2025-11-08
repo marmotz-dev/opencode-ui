@@ -2,6 +2,3 @@
 /build
 /dist
 /out
-.DS_Store
-.eslintcache
-*.log*
