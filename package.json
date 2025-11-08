@@ -30,7 +30,7 @@
     "build:win": "bun run build && electron-builder --win",
     "build:mac": "bun run build && electron-builder --mac",
     "build:linux": "bun run build && electron-builder --linux",
-    "test": "bun jest -c jest.config.js"
+    "test": "ng test"
   },
   "dependencies": {
     "@analogjs/vite-plugin-angular": "2.0.3",
@@ -63,6 +63,7 @@
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
+    "@angular-builders/jest": "^20.0.0",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",

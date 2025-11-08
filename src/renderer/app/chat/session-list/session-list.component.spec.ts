@@ -8,6 +8,7 @@ import { ContextMenu } from 'primeng/contextmenu'
 import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 import { SessionListComponent } from './session-list.component'
+;(window as any).environment = { env: 'test' }
 
 // Mock IconUi component to avoid FontAwesome issues
 @Component({
@@ -36,6 +37,11 @@ describe('SessionListComponent', () => {
       updated: Date.now(),
     },
   }
+
+  beforeAll(() => {
+    // Mock global environment
+    ;(window as any).environment = { env: 'test' }
+  })
 
   beforeEach(async () => {
     mockOpencodeChatService = {
@@ -70,6 +76,8 @@ describe('SessionListComponent', () => {
 
     fixture = TestBed.createComponent(SessionListComponent)
     component = fixture.componentInstance
+    // Mock isProduction for tests
+    component.isProduction = false
     fixture.detectChanges()
   })
 

@@ -24,7 +24,7 @@
         ]"
       >
         <div>{{ session.title }}</div>
-        @if (environment.env !== 'production') {
+        @if (!isProduction) {
           <div class="text-xs">{{ session.id }}</div>
         }
       </div>
