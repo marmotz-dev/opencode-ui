@@ -34,7 +34,7 @@ export class SessionsService {
   })
 
   constructor() {
-    effect(() => this.loadSessions())
+    effect(() => this.loadSessionsEffect())
 
     this.opencodeApi.onEvent('session.updated', (event: Event) => this.onSessionUpdated(event as EventSessionUpdated))
     this.opencodeApi.onEvent('session.deleted', (event: Event) => this.onSessionDeleted(event as EventSessionDeleted))
@@ -91,7 +91,7 @@ export class SessionsService {
     return null
   }
 
-  async loadSessions() {
+  async loadSessionsEffect() {
     const currentProject = this.currentProject()
     if (currentProject) {
       const response = await this.opencodeApi.getProjectSessions(currentProject)

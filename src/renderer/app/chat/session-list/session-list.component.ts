@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api'
 import { Button } from 'primeng/button'
 import { ClassNames } from 'primeng/classnames'
 import { ContextMenu } from 'primeng/contextmenu'
+import { ElectronService } from '../../shared'
 import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
 
@@ -32,7 +33,7 @@ export class SessionListComponent {
   private readonly opencodeChat = inject(OpencodeChatService)
   sessionId = this.opencodeChat.sessions.sessionId
   sessions = this.opencodeChat.sessions.sessions
-  isProduction = (window as any).environment?.env === 'production'
+  isDev = ElectronService.isDev()
 
   async createNewSession() {
     const newSession = await this.opencodeChat.sessions.createSession()

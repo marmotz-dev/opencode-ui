@@ -66,7 +66,7 @@ export class ChatComponent {
     const sessionId = this.sessionId()
     this.logger.debug('effect.loadSessionMessages', { currentProject, sessionId })
 
-    if (!currentProject) {
+    if (!currentProject || !sessionId) {
       return
     }
 

@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal } from '@angular/core'
+import { inject, Injectable, signal } from '@angular/core'
 import { Agent } from '@opencode-ai/sdk'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
@@ -13,8 +13,8 @@ export class AgentsService {
   private readonly _agents = signal<Agent[] | null>(null)
   public agents = this._agents.asReadonly()
 
-  constructor() {
-    effect(() => this.loadAgents())
+  async init() {
+    await this.loadAgents()
   }
 
   async loadAgents() {

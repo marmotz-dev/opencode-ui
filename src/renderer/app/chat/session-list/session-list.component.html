@@ -24,7 +24,7 @@
         ]"
       >
         <div>{{ session.title }}</div>
-        @if (!isProduction) {
+        @if (isDev) {
           <div class="text-xs">{{ session.id }}</div>
         }
       </div>

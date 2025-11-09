@@ -141,7 +141,7 @@ describe('SessionsService', () => {
     mockOpencodeApiService.getProjectSessions.mockResolvedValue({ data: sessions })
 
     service.setCurrentProject(mockProject)
-    await service.loadSessions()
+    await service.loadSessionsEffect()
 
     expect(service.sessions()).toEqual(sessions)
     expect(mockOpencodeApiService.getProjectSessions).toHaveBeenCalledWith(mockProject)

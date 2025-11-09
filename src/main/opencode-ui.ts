@@ -16,7 +16,7 @@ export class OpencodeUi {
 
   constructor() {
     this.config = {
-      title: 'Opencode UI'
+      title: 'Opencode UI',
     }
     this.configPath = join(ElectronService.getApp().getPath('userData'), 'config.json')
     this.loadConfig()
@@ -41,8 +41,8 @@ export class OpencodeUi {
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
         preload: fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
-        sandbox: false
-      }
+        sandbox: false,
+      },
     })
 
     this.mainWindow.on('ready-to-show', () => {
@@ -53,7 +53,7 @@ export class OpencodeUi {
       ElectronService.getShell().openExternal(details.url)
 
       return {
-        action: 'deny'
+        action: 'deny',
       }
     })
 
@@ -76,7 +76,7 @@ export class OpencodeUi {
       const configRawContent = readFileSync(this.configPath)
       this.config = {
         ...this.config,
-        ...JSON.parse(configRawContent.toString() ?? '{}')
+        ...JSON.parse(configRawContent.toString() ?? '{}'),
       }
     }
   }
@@ -102,6 +102,9 @@ export class OpencodeUi {
         })
 
         await this.createWindow()
+
+        this.opencodeService = await OpencodeService.init(this.mainWindow)
+        this.setupIPC()
 
         if (ElectronService.isDev()) {
           const updateTitleFromUrl = (_e: any, navigationEntry: string) => {
@@ -132,54 +135,43 @@ export class OpencodeUi {
             await this.createWindow()
           }
         })
-
-        this.opencodeService = await OpencodeService.init(this.mainWindow)
-        this.setupIPC()
       })
   }
 
   private setupIPC() {
     ElectronService.getIpcMain().handle('select-directory', async () => {
       const result = await ElectronService.getDialog().showOpenDialog(this.mainWindow!, {
-        properties: ['openDirectory']
+        properties: ['openDirectory'],
       })
 
       return result.canceled ? null : result.filePaths[0]
     })
 
-    ElectronService.getIpcMain().handle('opencode.agents.get', () =>
-      this.opencodeService.getAgents()
-    )
-    ElectronService.getIpcMain().handle('opencode.config.get', () =>
-      this.opencodeService.getConfig()
-    )
-    ElectronService.getIpcMain().handle('opencode.providers.get', () =>
-      this.opencodeService.getProviders()
-    )
-    ElectronService.getIpcMain().handle('opencode.session.create', () =>
-      this.opencodeService.createSession()
-    )
+    ElectronService.getIpcMain().handle('opencode.agents.get', () => this.opencodeService.getAgents())
+    ElectronService.getIpcMain().handle('opencode.config.get', () => this.opencodeService.getConfig())
+    ElectronService.getIpcMain().handle('opencode.providers.get', () => this.opencodeService.getProviders())
+    ElectronService.getIpcMain().handle('opencode.session.create', () => this.opencodeService.createSession())
     ElectronService.getIpcMain().handle('opencode.session.delete', (_, sessionId: string) =>
       this.opencodeService.deleteSession(sessionId)
     )
-    ElectronService.getIpcMain().handle(
-      'opencode.session.messages.get-all',
-      (_, sessionId: string) => this.opencodeService.getSessionMessages(sessionId)
+    ElectronService.getIpcMain().handle('opencode.session.messages.get-all', (_, sessionId: string) =>
+      this.opencodeService.getSessionMessages(sessionId)
     )
     ElectronService.getIpcMain().handle(
       'opencode.session.prompt',
-      (_, sessionId: string, message: string, model?: Model) =>
-        this.opencodeService.prompt(sessionId, message, model)
+      (_, sessionId: string, message: string, model?: Model) => this.opencodeService.prompt(sessionId, message, model)
     )
     ElectronService.getIpcMain().handle('opencode.path.get', () => this.opencodeService.getPath())
-    ElectronService.getIpcMain().handle('opencode.project.get-all', () =>
-      this.opencodeService.getProjects()
-    )
-    ElectronService.getIpcMain().handle('opencode.project.get-current', () =>
-      this.opencodeService.getCurrentProject()
-    )
+    ElectronService.getIpcMain().handle('opencode.project.get-all', () => this.opencodeService.getProjects())
+    ElectronService.getIpcMain().handle('opencode.project.get-current', () => this.opencodeService.getCurrentProject())
     ElectronService.getIpcMain().handle('opencode.project.sessions', (_, projectPath: string) =>
       this.opencodeService.getProjectSessions(projectPath)
     )
+
+    this.mainWindow.webContents.send('ipc-ready')
+
+    this.mainWindow.webContents.on('did-finish-load', () => {
+      this.mainWindow.webContents.send('ipc-ready')
+    })
   }
 }

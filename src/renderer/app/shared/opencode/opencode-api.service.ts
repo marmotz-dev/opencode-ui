@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { Event, Project } from '@opencode-ai/sdk/client'
 import { ElectronService } from '..'
 import { Logger } from '../logger/logger.service'
@@ -25,7 +25,6 @@ type EventCallback = (event: Event) => void | Promise<void>
 export class OpencodeApiService {
   private logger = new Logger(OpencodeApiService.name)
 
-  private electronService = inject(ElectronService)
   private eventCallbacks = new Map<Event['type'], EventCallback[]>()
 
   constructor() {
@@ -33,7 +32,7 @@ export class OpencodeApiService {
   }
 
   async createSession(): Promise<CreateSessionResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.session.create')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.session.create')
 
     this.logger.debug('createSession', {
       response: response.data,
@@ -43,7 +42,7 @@ export class OpencodeApiService {
   }
 
   async deleteSession(id: string): Promise<DeleteSessionResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.session.delete', id)
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.session.delete', id)
 
     this.logger.debug('deleteSession', {
       request: { id },
@@ -54,7 +53,7 @@ export class OpencodeApiService {
   }
 
   async getAgents(): Promise<GetAgentsResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.agents.get')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.agents.get')
 
     this.logger.debug('getAgents', {
       response: response.data,
@@ -64,7 +63,7 @@ export class OpencodeApiService {
   }
 
   async getConfig(): Promise<GetConfigResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.config.get')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.config.get')
 
     this.logger.debug('getConfig', {
       response: response.data,
@@ -74,7 +73,7 @@ export class OpencodeApiService {
   }
 
   async getCurrentProject(): Promise<GetCurrentProjectResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.project.get-current')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.project.get-current')
 
     this.logger.debug('getCurrentProject', {
       response: response.data,
@@ -84,7 +83,7 @@ export class OpencodeApiService {
   }
 
   async getPath(): Promise<GetPathResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.path.get')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.path.get')
 
     this.logger.debug('getPath', {
       response: response.data,
@@ -94,7 +93,7 @@ export class OpencodeApiService {
   }
 
   async getProjectSessions(project: Project): Promise<GetSessionsResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.project.sessions', project.worktree)
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.project.sessions', project.worktree)
 
     this.logger.debug('getProjectSessions', {
       request: { projectWorktree: project.worktree },
@@ -105,7 +104,7 @@ export class OpencodeApiService {
   }
 
   async getProjects(): Promise<GetProjectsResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.project.get-all')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.project.get-all')
 
     this.logger.debug('getProjects', {
       response: response.data,
@@ -115,7 +114,7 @@ export class OpencodeApiService {
   }
 
   async getProviders(): Promise<GetProvidersResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.providers.get')
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.providers.get')
 
     this.logger.debug('getProviders', {
       response: response.data,
@@ -125,7 +124,7 @@ export class OpencodeApiService {
   }
 
   async getSessionMessages(sessionId: string): Promise<GetSessionMessagesResponse> {
-    const response = await this.electronService.ipcRenderer.invoke('opencode.session.messages.get-all', sessionId)
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.session.messages.get-all', sessionId)
 
     this.logger.debug('getSessionMessages', {
       request: { sessionId },
@@ -136,7 +135,7 @@ export class OpencodeApiService {
   }
 
   listenEvents() {
-    this.electronService.ipcRenderer.on('opencode.event', (_e, event: Event) => {
+    ElectronService.getIpcRenderer().on('opencode.event', (_e, event: Event) => {
       const callbacks = this.eventCallbacks.get(event.type) ?? []
 
       this.logger.debug('new event', {
@@ -173,7 +172,7 @@ export class OpencodeApiService {
         }
       : undefined
 
-    const response = await this.electronService.ipcRenderer.invoke(
+    const response = await ElectronService.getIpcRenderer().invoke(
       'opencode.session.prompt',
       sessionId,
       message,
