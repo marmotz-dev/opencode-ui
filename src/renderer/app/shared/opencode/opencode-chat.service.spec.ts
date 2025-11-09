@@ -16,6 +16,7 @@ describe('OpencodeChatService', () => {
   beforeEach(() => {
     mockProjectsService = {
       currentProject: signal(null),
+      init: jest.fn().mockResolvedValue(undefined),
     }
     mockSessionsService = {
       setCurrentProject: jest.fn(),
@@ -24,11 +25,11 @@ describe('OpencodeChatService', () => {
     TestBed.configureTestingModule({
       providers: [
         OpencodeChatService,
-        { provide: AgentsService, useValue: {} },
-        { provide: ConfigService, useValue: {} },
+        { provide: AgentsService, useValue: { init: jest.fn().mockResolvedValue(undefined) } },
+        { provide: ConfigService, useValue: { init: jest.fn().mockResolvedValue(undefined) } },
         { provide: MessagesService, useValue: {} },
         { provide: ProjectsService, useValue: mockProjectsService },
-        { provide: ProvidersService, useValue: {} },
+        { provide: ProvidersService, useValue: { init: jest.fn().mockResolvedValue(undefined) } },
         { provide: SessionsService, useValue: mockSessionsService },
       ],
     })
@@ -47,15 +48,5 @@ describe('OpencodeChatService', () => {
     expect(service.providers).toBeDefined()
     expect(service.projects).toBeDefined()
     expect(service.sessions).toBeDefined()
-  })
-
-  it('should set current project on sessions when project changes', () => {
-    const project = { name: 'test' }
-    mockProjectsService.currentProject.set(project)
-
-    // Wait for effect
-    setTimeout(() => {
-      expect(mockSessionsService.setCurrentProject).toHaveBeenCalledWith(project)
-    }, 0)
   })
 })

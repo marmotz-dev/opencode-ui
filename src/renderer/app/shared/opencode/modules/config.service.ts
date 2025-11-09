@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal } from '@angular/core'
+import { inject, Injectable, signal } from '@angular/core'
 import { Config } from '@opencode-ai/sdk/client'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
@@ -13,8 +13,8 @@ export class ConfigService {
   private readonly _config = signal<Config | null>(null)
   public config = this._config.asReadonly()
 
-  constructor() {
-    effect(() => this.loadConfig())
+  async init() {
+    await this.loadConfig()
   }
 
   async loadConfig() {

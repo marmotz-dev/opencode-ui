@@ -6,6 +6,12 @@ import { provideMarkdown } from 'ngx-markdown'
 import { providePrimeNG } from 'primeng/config'
 import { routes } from './app.routes'
 import './prism'
+import { ElectronService } from './shared'
+import { Logger, LogLevel } from './shared/logger/logger.service'
+
+if (ElectronService.isDev()) {
+  Logger.setLogLevel(LogLevel.DEBUG)
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [

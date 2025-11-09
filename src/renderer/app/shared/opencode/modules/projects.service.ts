@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal } from '@angular/core'
+import { inject, Injectable, signal } from '@angular/core'
 import { Path } from '@opencode-ai/sdk/client'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
@@ -20,11 +20,12 @@ export class ProjectsService {
   private readonly _currentPath = signal<Path | null>(null)
   public currentPath = this._currentPath.asReadonly()
 
-  private _projectSelectorVisible = signal<boolean>(true)
+  private _projectSelectorVisible = signal<boolean>(false)
   public projectSelectorVisible = this._projectSelectorVisible.asReadonly()
 
-  constructor() {
-    effect(() => Promise.all([this.loadProjects(), this.loadCurrentProject(), this.loadPath()]))
+  async init() {
+    await Promise.all([this.loadProjects(), this.loadCurrentProject(), this.loadPath()])
+    this._projectSelectorVisible.set(true)
   }
 
   async loadProjects() {

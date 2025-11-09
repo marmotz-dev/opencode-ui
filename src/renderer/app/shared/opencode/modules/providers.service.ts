@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal } from '@angular/core'
+import { inject, Injectable, signal } from '@angular/core'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
 import { Model, ProviderData } from '../opencode.types'
@@ -20,8 +20,8 @@ export class ProvidersService {
   private _modelSelectorVisible = signal<boolean>(false)
   public modelSelectorVisible = this._modelSelectorVisible.asReadonly()
 
-  constructor() {
-    effect(() => this.loadProviders())
+  async init() {
+    await this.loadProviders()
   }
 
   async loadProviders() {

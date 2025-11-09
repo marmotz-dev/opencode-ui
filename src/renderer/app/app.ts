@@ -1,5 +1,8 @@
-import { Component } from '@angular/core'
-import { RouterOutlet } from '@angular/router'
+import { Component, inject } from '@angular/core'
+import { Router, RouterOutlet } from '@angular/router'
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
+import { faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { KeyboardShortcutService } from './shared'
 
 @Component({
   selector: '#root',
@@ -8,7 +11,15 @@ import { RouterOutlet } from '@angular/router'
   imports: [RouterOutlet],
 })
 export class App {
-  constructor() {
-    window.electron.ipcRenderer.send('ping')
+  private router = inject(Router)
+  private keyboardShortcutService = inject(KeyboardShortcutService)
+
+  constructor(library: FaIconLibrary) {
+    this.keyboardShortcutService.init()
+
+    library.addIcons(faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash)
+
+    localStorage.setItem('redirectUrl', window.location.toString())
+    this.router.navigate(['loading'])
   }
 }

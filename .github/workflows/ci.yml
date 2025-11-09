@@ -49,7 +49,8 @@ jobs:
         run: bun install
 
       - name: Build app
-        run: bun run build
+        shell: bash
+        run: NG_PERSISTENT_BUILD_CACHE=0 bun run build
 
       - name: Build Electron for ${{ matrix.os }}
         shell: bash

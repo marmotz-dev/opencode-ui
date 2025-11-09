@@ -1,19 +1,17 @@
-import { Injectable } from '@angular/core'
-import { IpcRenderer, WebFrame } from '@electron-toolkit/preload'
-
-@Injectable({
-  providedIn: 'root',
-})
 export class ElectronService {
-  ipcRenderer: IpcRenderer
-  webFrame: WebFrame
-
-  constructor() {
-    this.ipcRenderer = window.electron.ipcRenderer
-    this.webFrame = window.electron.webFrame
+  static getIpcRenderer() {
+    return window.electron.ipcRenderer
   }
 
-  async selectDirectory(): Promise<string | null> {
-    return this.ipcRenderer.invoke('select-directory')
+  static getWebFrame() {
+    return window.electron.webFrame
+  }
+
+  static isDev() {
+    return window.electron.process.env.NODE_ENV === 'development'
+  }
+
+  static async selectDirectory(): Promise<string | null> {
+    return this.getIpcRenderer().invoke('select-directory')
   }
 }

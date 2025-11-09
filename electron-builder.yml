@@ -12,29 +12,26 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: ${productName}
-  icon: dist/assets/icons/opencode-ui.png
+  icon: resources/icons/opencode-ui.png
   target: ["nsis"]
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  icon: resources/icons/opencode-ui.icns
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
   notarize: false
 dmg:
-  icon: dist/assets/icons/opencode-ui.png
   artifactName: ${name}-${version}.${ext}
 linux:
-  icon: dist/assets/icons/opencode-ui.png
+  icon: resources/icons/opencode-ui.png
   target:
     - AppImage
     - snap
-#    - deb
-#    - rpm
+    - deb
+    - rpm
   maintainer: marmotz.dev
   category: "Development;IDE;"
   desktop:

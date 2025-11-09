@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { PrimeTemplate } from 'primeng/api'
 import { Button } from 'primeng/button'
 import { ElectronService } from '../../shared'
-import { SelectorComponent, SelectorItem } from '../../shared/ui/selector/selector.ui'
 import { OpencodeChatService, Project } from '../../shared/opencode'
+import { SelectorComponent, SelectorItem } from '../../shared/ui/selector/selector.ui'
 
 @Component({
   selector: 'app-project-selector',
@@ -13,7 +13,6 @@ import { OpencodeChatService, Project } from '../../shared/opencode'
 })
 export class ProjectSelectorComponent {
   private opencodeChat = inject(OpencodeChatService)
-  private electronService = inject(ElectronService)
 
   readonly visible = input.required<boolean>()
 
@@ -41,7 +40,7 @@ export class ProjectSelectorComponent {
   }
 
   protected async createProject() {
-    const projectPath = await this.electronService.selectDirectory()
+    const projectPath = await ElectronService.selectDirectory()
     if (!projectPath) {
       return
     }
