@@ -1,7 +1,16 @@
 import { Component, inject } from '@angular/core'
 import { Router, RouterOutlet } from '@angular/router'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
-import { faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCheck,
+  faChevronUp,
+  faFolder,
+  faPaperPlane,
+  faPencil,
+  faPlusCircle,
+  faTrash,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
 import { KeyboardShortcutService } from './shared'
 
 @Component({
@@ -17,7 +26,7 @@ export class App {
   constructor(library: FaIconLibrary) {
     this.keyboardShortcutService.init()
 
-    library.addIcons(faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash)
+    library.addIcons(faCheck, faChevronUp, faFolder, faPaperPlane, faPencil, faPlusCircle, faTrash, faXmark)
 
     localStorage.setItem('redirectUrl', window.location.toString())
     this.router.navigate(['loading'])

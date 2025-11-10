@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core'
 import { Router } from '@angular/router'
+import { Session } from '@opencode-ai/sdk/client'
 import { MenuItem } from 'primeng/api'
 import { Button } from 'primeng/button'
 import { ClassNames } from 'primeng/classnames'
@@ -7,10 +8,11 @@ import { ContextMenu } from 'primeng/contextmenu'
 import { ElectronService } from '../../shared'
 import { OpencodeChatService } from '../../shared/opencode'
 import { IconUi } from '../../shared/ui/icon/icon.ui'
+import { SessionRenamerComponent } from '../session-renamer/session-renamer.component'
 
 @Component({
   selector: 'app-sessions-list',
-  imports: [Button, ClassNames, IconUi, ContextMenu],
+  imports: [Button, ClassNames, IconUi, ContextMenu, SessionRenamerComponent],
   templateUrl: './session-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -20,8 +22,14 @@ import { IconUi } from '../../shared/ui/icon/icon.ui'
 export class SessionListComponent {
   readonly contextMenu = viewChild<ContextMenu>('contextMenu')
   readonly commandSessionId = signal<string | null>(null)
+  readonly renamerVisible = signal(false)
+  readonly currentSession = signal<Session | null>(null)
   contextMenuItems: MenuItem[] = [
-    // { label: 'Rename', icon: faPencil },
+    {
+      label: 'Rename',
+      icon: 'pencil',
+      command: () => this.renameSession(),
+    },
     {
       label: 'Delete',
       icon: 'trash',
@@ -51,6 +59,31 @@ export class SessionListComponent {
         await this.router.navigate(['chat', newSessionId])
       }
     }
+  }
+
+  async renameSession() {
+    const sessionId = this.commandSessionId()
+    const sessions = this.sessions()
+    if (sessionId && sessions) {
+      const session = sessions.find((s) => s.id === sessionId)
+      if (session) {
+        this.currentSession.set(session)
+        this.renamerVisible.set(true)
+      }
+    }
+  }
+
+  async onSessionRenamed(newName: string) {
+    const session = this.currentSession()
+    if (session) {
+      await this.opencodeChat.sessions.renameSession(session.id, newName)
+      this.currentSession.set(null)
+    }
+  }
+
+  hideRenamer() {
+    this.renamerVisible.set(false)
+    this.currentSession.set(null)
   }
 
   hideContextMenu() {

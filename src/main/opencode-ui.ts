@@ -13,6 +13,7 @@ export class OpencodeUi {
   private config: Record<string, any>
   private readonly configPath: string
   private saveTimer: ReturnType<typeof setTimeout> | null = null
+  private booted = false
 
   constructor() {
     this.config = {
@@ -46,7 +47,13 @@ export class OpencodeUi {
     })
 
     this.mainWindow.on('ready-to-show', () => {
-      this.mainWindow.show()
+      if (!this.booted) {
+        this.booted = true
+        this.mainWindow.show()
+      } else {
+        this.mainWindow.showInactive()
+        this.mainWindow.blur()
+      }
     })
 
     this.mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -154,12 +161,15 @@ export class OpencodeUi {
     ElectronService.getIpcMain().handle('opencode.session.delete', (_, sessionId: string) =>
       this.opencodeService.deleteSession(sessionId)
     )
+    ElectronService.getIpcMain().handle('opencode.session.rename', (_, sessionId: string, newName: string) =>
+      this.opencodeService.renameSession(sessionId, newName)
+    )
     ElectronService.getIpcMain().handle('opencode.session.messages.get-all', (_, sessionId: string) =>
       this.opencodeService.getSessionMessages(sessionId)
     )
     ElectronService.getIpcMain().handle(
       'opencode.session.prompt',
-      (_, sessionId: string, message: string, model?: Model) => this.opencodeService.prompt(sessionId, message, model)
+      (_, sessionId: string, message: string, model: Model) => this.opencodeService.prompt(sessionId, message, model)
     )
     ElectronService.getIpcMain().handle('opencode.path.get', () => this.opencodeService.getPath())
     ElectronService.getIpcMain().handle('opencode.project.get-all', () => this.opencodeService.getProjects())

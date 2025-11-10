@@ -27,6 +27,7 @@ describe('SessionsService', () => {
       getProjectSessions: jest.fn(),
       createSession: jest.fn(),
       deleteSession: jest.fn(),
+      renameSession: jest.fn(),
       onEvent: jest.fn(),
     }
     mockLogger = {
@@ -198,5 +199,24 @@ describe('SessionsService', () => {
 
     expect(service.sessions()).toEqual([])
     expect(service.sessionId()).toBeNull()
+  })
+
+  describe('renameSession', () => {
+    it('should rename session successfully', async () => {
+      const mockRename = jest.fn().mockResolvedValue({ data: { ...mockSession, title: 'New Name' } })
+      mockOpencodeApiService.renameSession = mockRename
+
+      await service.renameSession('test-session-id', 'New Name')
+
+      expect(mockRename).toHaveBeenCalledWith('test-session-id', 'New Name')
+    })
+
+    it('should handle rename session error', async () => {
+      const error = new Error('Rename failed')
+      const mockRename = jest.fn().mockRejectedValue(error)
+      mockOpencodeApiService.renameSession = mockRename
+
+      await expect(service.renameSession('test-session-id', 'New Name')).rejects.toThrow('Rename failed')
+    })
   })
 })
