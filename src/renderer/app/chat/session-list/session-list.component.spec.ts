@@ -44,6 +44,7 @@ describe('SessionListComponent', () => {
         sessions: signal([mockSession]),
         createSession: jest.fn(),
         deleteSession: jest.fn(),
+        renameSession: jest.fn(),
       },
     }
 
@@ -83,9 +84,11 @@ describe('SessionListComponent', () => {
   })
 
   it('should have context menu items', () => {
-    expect(component.contextMenuItems).toHaveLength(1)
-    expect(component.contextMenuItems[0].label).toBe('Delete')
-    expect(component.contextMenuItems[0].icon).toBe('trash')
+    expect(component.contextMenuItems).toHaveLength(2)
+    expect(component.contextMenuItems[0].label).toBe('Rename')
+    expect(component.contextMenuItems[0].icon).toBe('pencil')
+    expect(component.contextMenuItems[1].label).toBe('Delete')
+    expect(component.contextMenuItems[1].icon).toBe('trash')
   })
 
   describe('createNewSession', () => {
@@ -145,6 +148,67 @@ describe('SessionListComponent', () => {
       await component.selectSession('test-session-id')
 
       expect(mockRouter.navigate).toHaveBeenCalledWith(['chat', 'test-session-id'])
+    })
+  })
+
+  describe('renameSession', () => {
+    it('should set currentSession and show renamer when session exists', () => {
+      component['commandSessionId'].set('test-session-id')
+
+      component.renameSession()
+
+      expect(component['currentSession']()).toEqual(mockSession)
+      expect(component['renamerVisible']()).toBe(true)
+    })
+
+    it('should not show renamer when sessionId is null', () => {
+      component['commandSessionId'].set(null)
+
+      component.renameSession()
+
+      expect(component['currentSession']()).toBeNull()
+      expect(component['renamerVisible']()).toBe(false)
+    })
+
+    it('should not show renamer when session not found', () => {
+      component['commandSessionId'].set('non-existent-id')
+
+      component.renameSession()
+
+      expect(component['currentSession']()).toBeNull()
+      expect(component['renamerVisible']()).toBe(false)
+    })
+  })
+
+  describe('onSessionRenamed', () => {
+    it('should rename session and reset currentSession', async () => {
+      component['currentSession'].set(mockSession)
+      mockOpencodeChatService.sessions.renameSession.mockResolvedValue(undefined)
+
+      await component.onSessionRenamed('New Name')
+
+      expect(mockOpencodeChatService.sessions.renameSession).toHaveBeenCalledWith('test-session-id', 'New Name')
+      expect(component['currentSession']()).toBeNull()
+    })
+
+    it('should not rename when no currentSession', async () => {
+      component['currentSession'].set(null)
+
+      await component.onSessionRenamed('New Name')
+
+      expect(mockOpencodeChatService.sessions.renameSession).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('hideRenamer', () => {
+    it('should hide renamer and reset currentSession', () => {
+      component['renamerVisible'].set(true)
+      component['currentSession'].set(mockSession)
+
+      component.hideRenamer()
+
+      expect(component['renamerVisible']()).toBe(false)
+      expect(component['currentSession']()).toBeNull()
     })
   })
 })

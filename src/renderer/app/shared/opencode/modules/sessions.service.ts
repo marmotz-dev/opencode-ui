@@ -51,13 +51,13 @@ export class SessionsService {
 
     const newSession = response.data
 
-    this.logger.debug('SessionsService.createSession', { newSession })
+    this.logger.debug('createSession', { newSession })
 
     return newSession
   }
 
   async deleteSession(sessionId: string) {
-    this.logger.debug('SessionsService.deleteSession', { sessionId })
+    this.logger.debug('deleteSession', { sessionId })
 
     await this.opencodeApi.deleteSession(sessionId)
 
@@ -73,13 +73,13 @@ export class SessionsService {
       if (currentIndex !== undefined && currentIndex !== -1) {
         if (newSessions[currentIndex] !== undefined) {
           newSessionId = newSessions[currentIndex].id
-          this.logger.debug('SessionsService.deleteSession.selectNext', { newSessionId })
+          this.logger.debug('deleteSession.selectNext', { newSessionId })
         } else if (newSessions[currentIndex - 1] !== undefined) {
           newSessionId = newSessions[currentIndex - 1].id
-          this.logger.debug('SessionsService.deleteSession.selectPrevious', { newSessionId })
+          this.logger.debug('deleteSession.selectPrevious', { newSessionId })
         } else {
           newSessionId = null
-          this.logger.debug('SessionsService.deleteSession.noMoreSection')
+          this.logger.debug('deleteSession.noMoreSection')
         }
       }
 
@@ -89,6 +89,12 @@ export class SessionsService {
     }
 
     return null
+  }
+
+  async renameSession(sessionId: string, newName: string) {
+    this.logger.debug('renameSession', { sessionId, newName })
+
+    await this.opencodeApi.renameSession(sessionId, newName)
   }
 
   async loadSessionsEffect() {

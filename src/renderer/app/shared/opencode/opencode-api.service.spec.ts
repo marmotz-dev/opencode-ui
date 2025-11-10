@@ -61,4 +61,15 @@ describe('OpencodeApiService', () => {
 
     expect(service['eventCallbacks'].get('message.updated')).toContain(callback)
   })
+
+  it('should rename session', async () => {
+    const mockResponse = { data: 'renamed' }
+    const mockIpcRenderer = ElectronService.getIpcRenderer()
+    ;(mockIpcRenderer.invoke as jest.Mock).mockResolvedValue(mockResponse)
+
+    const result = await service.renameSession('session1', 'New Name')
+
+    expect(mockIpcRenderer.invoke).toHaveBeenCalledWith('opencode.session.rename', 'session1', 'New Name')
+    expect(result).toBe(mockResponse)
+  })
 })

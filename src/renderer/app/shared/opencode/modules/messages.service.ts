@@ -153,7 +153,7 @@ export class MessagesService {
 
     const model = this.currentModel()
 
-    this.opencodeApi.prompt(sessionId, message, model).then((response) => {
+    this.opencodeApi.prompt(sessionId, message, model!).then((response) => {
       this.logger.debug('prompt.response', { message, sessionId, response })
     })
   }

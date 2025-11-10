@@ -7,7 +7,7 @@ import { MarkdownComponent } from 'ngx-markdown'
   template: `
     <markdown
       [data]="data()"
-      class="flex flex-col whitespace-pre-line"
+      class="flex flex-col wrap-break-word whitespace-pre-line"
     />
   `,
   styleUrls: ['./markdown.ui.css'],

@@ -29,8 +29,19 @@ export class OpencodeService {
   deleteSession(sessionId: string) {
     return this.client.session.delete({
       path: {
-        id: sessionId
-      }
+        id: sessionId,
+      },
+    })
+  }
+
+  renameSession(sessionId: string, newName: string) {
+    return this.client.session.update({
+      path: {
+        id: sessionId,
+      },
+      body: {
+        title: newName,
+      },
     })
   }
 
@@ -45,8 +56,8 @@ export class OpencodeService {
   getProjectSessions(projectPath: string) {
     return this.client.session.list({
       query: {
-        directory: projectPath
-      }
+        directory: projectPath,
+      },
     })
   }
 
@@ -69,8 +80,8 @@ export class OpencodeService {
   getSessionMessages(sessionId: string) {
     return this.client.session.messages({
       path: {
-        id: sessionId
-      }
+        id: sessionId,
+      },
     })
   }
 
@@ -83,20 +94,20 @@ export class OpencodeService {
     }
   }
 
-  prompt(sessionId: string, message: string, model?: Model) {
+  prompt(sessionId: string, message: string, model: Model) {
     return this.client.session.prompt({
       path: {
-        id: sessionId
+        id: sessionId,
       },
       body: {
         model,
         parts: [
           {
             type: 'text',
-            text: message
-          }
-        ]
-      }
+            text: message,
+          },
+        ],
+      },
     })
   }
 }

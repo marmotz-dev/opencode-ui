@@ -58,6 +58,7 @@ export type GetProvidersResponse = OpencodeResponse<ProviderData, unknown>
 
 export type CreateSessionResponse = OpencodeResponse<Session, BadRequestError>
 export type DeleteSessionResponse = OpencodeResponse<boolean, BadRequestError | NotFoundError>
+export type UpdateSessionResponse = OpencodeResponse<Session, BadRequestError | NotFoundError>
 export type GetSessionsResponse = OpencodeResponse<Session[], unknown>
 
 export type GetSessionMessagesResponse = OpencodeResponse<SessionMessage[], BadRequestError | NotFoundError>

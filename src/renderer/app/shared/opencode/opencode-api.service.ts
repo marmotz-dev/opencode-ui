@@ -15,6 +15,7 @@ import {
   GetSessionsResponse,
   Model,
   PromptResponse,
+  UpdateSessionResponse,
 } from './opencode.types'
 
 type EventCallback = (event: Event) => void | Promise<void>
@@ -46,6 +47,17 @@ export class OpencodeApiService {
 
     this.logger.debug('deleteSession', {
       request: { id },
+      response: response.data,
+    })
+
+    return response
+  }
+
+  async renameSession(id: string, newName: string): Promise<UpdateSessionResponse> {
+    const response = await ElectronService.getIpcRenderer().invoke('opencode.session.rename', id, newName)
+
+    this.logger.debug('renameSession', {
+      request: { id, newName },
       response: response.data,
     })
 
@@ -164,13 +176,11 @@ export class OpencodeApiService {
     this.eventCallbacks.set(eventType, callbacks)
   }
 
-  async prompt(sessionId: string, message: string, model: Model | null): Promise<PromptResponse> {
-    const modelData = model
-      ? {
-          providerID: model.providerID,
-          modelID: model.modelID,
-        }
-      : undefined
+  async prompt(sessionId: string, message: string, model: Model): Promise<PromptResponse> {
+    const modelData = {
+      providerID: model.providerID,
+      modelID: model.modelID,
+    }
 
     const response = await ElectronService.getIpcRenderer().invoke(
       'opencode.session.prompt',

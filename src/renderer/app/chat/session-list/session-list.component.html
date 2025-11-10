@@ -23,7 +23,7 @@
           },
         ]"
       >
-        <div>{{ session.title }}</div>
+        <div class="wrap-break-word">{{ session.title }}</div>
         @if (isDev) {
           <div class="text-xs">{{ session.id }}</div>
         }
@@ -50,3 +50,10 @@
     </a>
   </ng-template>
 </p-contextmenu>
+
+<app-session-renamer
+  [visible]="renamerVisible()"
+  [session]="currentSession()"
+  (renamed)="onSessionRenamed($event)"
+  (visibleChange)="hideRenamer()"
+/>
