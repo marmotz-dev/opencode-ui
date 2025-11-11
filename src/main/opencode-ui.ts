@@ -13,7 +13,6 @@ export class OpencodeUi {
   private config: Record<string, any>
   private readonly configPath: string
   private saveTimer: ReturnType<typeof setTimeout> | null = null
-  private booted = false
 
   constructor() {
     this.config = {
@@ -47,13 +46,7 @@ export class OpencodeUi {
     })
 
     this.mainWindow.on('ready-to-show', () => {
-      if (!this.booted) {
-        this.booted = true
-        this.mainWindow.show()
-      } else {
-        this.mainWindow.showInactive()
-        this.mainWindow.blur()
-      }
+      this.mainWindow.show()
     })
 
     this.mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -61,6 +54,13 @@ export class OpencodeUi {
 
       return {
         action: 'deny',
+      }
+    })
+
+    this.mainWindow.webContents.on('will-navigate', (event, url) => {
+      if (url.startsWith('http')) {
+        event.preventDefault()
+        ElectronService.getShell().openExternal(url)
       }
     })
 
