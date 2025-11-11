@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core'
 import { Path } from '@opencode-ai/sdk/client'
+import { ElectronService } from '../..'
 import { Logger } from '../../logger/logger.service'
 import { OpencodeApiService } from '../opencode-api.service'
 import { Project } from '../opencode.types'
@@ -63,7 +64,12 @@ export class ProjectsService {
     this._currentProject.set(project)
   }
 
-  closeProjectSelector() {
+  async closeProjectSelector() {
     this._projectSelectorVisible.set(false)
+
+    // If no current project is set (first launch), close the app
+    if (!this._currentProject()) {
+      await ElectronService.closeApp()
+    }
   }
 }

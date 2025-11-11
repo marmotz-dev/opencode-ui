@@ -31,7 +31,7 @@ jobs:
         run: bun run test
 
   build:
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    if: github.event_name == 'push'
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
