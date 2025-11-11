@@ -14,4 +14,8 @@ export class ElectronService {
   static async selectDirectory(): Promise<string | null> {
     return this.getIpcRenderer().invoke('select-directory')
   }
+
+  static async closeApp(): Promise<void> {
+    await this.getIpcRenderer().invoke('close-app')
+  }
 }

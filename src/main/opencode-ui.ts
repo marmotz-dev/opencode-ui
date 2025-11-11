@@ -177,6 +177,9 @@ export class OpencodeUi {
     ElectronService.getIpcMain().handle('opencode.project.sessions', (_, projectPath: string) =>
       this.opencodeService.getProjectSessions(projectPath)
     )
+    ElectronService.getIpcMain().handle('close-app', () => {
+      ElectronService.getApp().quit()
+    })
 
     this.mainWindow.webContents.send('ipc-ready')
 
