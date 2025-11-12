@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { TextPart } from '@opencode-ai/sdk/client'
-import { MarkdownModule } from 'ngx-markdown'
 
 import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
 import { RelativeTimePipe } from '../../pipes/relative-time.pipe'
@@ -13,7 +12,7 @@ describe('TextPartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextPartComponent, RelativeTimePipe, MarkdownUi, HttpClientModule, MarkdownModule.forRoot()],
+      imports: [TextPartComponent, RelativeTimePipe, MarkdownUi, HttpClientModule],
     }).compileComponents()
 
     fixture = TestBed.createComponent(TextPartComponent)
