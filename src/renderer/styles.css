@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
+@import "highlight.js/styles/atom-one-dark.css";
 
 @font-face {
   font-family: 'Inter Variable';

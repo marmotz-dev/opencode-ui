@@ -2,7 +2,6 @@ import { HttpClientModule } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 import { AssistantMessage, ReasoningPart } from '@opencode-ai/sdk/client'
-import { MarkdownModule } from 'ngx-markdown'
 
 import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.ui'
 import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
@@ -23,7 +22,6 @@ describe('ReasoningPartComponent', () => {
         CollapsibleUi,
         MarkdownUi,
         HttpClientModule,
-        MarkdownModule.forRoot(),
       ],
       providers: [
         {

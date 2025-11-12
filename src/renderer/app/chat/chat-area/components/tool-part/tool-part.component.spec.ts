@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
-import { MarkdownModule } from 'ngx-markdown'
 
 import { CollapsibleUi } from '../../../../shared/ui/collapsible/collapsible.ui'
 import { MarkdownUi } from '../../../../shared/ui/markdown/markdown.ui'
@@ -15,15 +14,7 @@ describe('ToolPartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ToolPartComponent,
-        RelativeTimePipe,
-        PartTimeDurationPipe,
-        CollapsibleUi,
-        MarkdownUi,
-        HttpClientModule,
-        MarkdownModule.forRoot(),
-      ],
+      imports: [ToolPartComponent, RelativeTimePipe, PartTimeDurationPipe, CollapsibleUi, MarkdownUi, HttpClientModule],
       providers: [
         {
           provide: FaIconLibrary,

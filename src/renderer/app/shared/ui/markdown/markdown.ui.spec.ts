@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { MarkdownModule } from 'ngx-markdown'
 
 import { MarkdownUi } from './markdown.ui'
 
@@ -10,7 +9,7 @@ describe('MarkdownUi', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MarkdownUi, HttpClientModule, MarkdownModule.forRoot()],
+      imports: [MarkdownUi, HttpClientModule],
     }).compileComponents()
 
     fixture = TestBed.createComponent(MarkdownUi)

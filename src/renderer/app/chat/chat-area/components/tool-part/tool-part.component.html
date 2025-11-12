@@ -1,11 +1,11 @@
-<div class="flex w-full flex-col items-start gap-y-1.5 pr-50 text-sm">
+<div class="tool-part flex w-full max-w-full flex-col items-start gap-y-1.5 pr-50 text-sm">
   <app-ui-collapsible
     [header]="header()"
-    class="space-y-5 rounded-lg border border-slate-100 bg-linear-to-b from-slate-50 to-slate-100 p-4 whitespace-pre-wrap text-slate-700 shadow-lg"
+    class="max-w-full space-y-5 rounded-lg border border-slate-100 bg-linear-to-b from-slate-50 to-slate-100 p-4 whitespace-pre-wrap text-slate-700 shadow-lg"
   >
     <app-ui-markdown
       [data]="output()"
-      class="inline-flex"
+      class="inline-flex max-w-full overflow-x-auto"
     />
   </app-ui-collapsible>
 
