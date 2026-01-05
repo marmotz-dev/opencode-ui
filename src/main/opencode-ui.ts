@@ -23,6 +23,25 @@ export class OpencodeUi {
   }
 
   async init() {
+    // Request single instance lock to prevent multiple instances
+    const gotTheLock = ElectronService.getApp().requestSingleInstanceLock()
+
+    if (!gotTheLock) {
+      // Another instance is already running, quit this one
+      ElectronService.getApp().quit()
+      return
+    }
+
+    // Handle second instance launch - focus existing window
+    ElectronService.getApp().on('second-instance', () => {
+      if (this.mainWindow) {
+        if (this.mainWindow.isMinimized()) {
+          this.mainWindow.restore()
+        }
+        this.mainWindow.focus()
+      }
+    })
+
     this.setupAppEvents()
   }
 
